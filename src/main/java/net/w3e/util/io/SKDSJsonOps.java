@@ -26,7 +26,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -169,7 +168,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (list != empty()) {
 			result.addAll(list.getAsJsonArray());
 		}
-		values.forEach(result::add);
+		result.addAll(values);
 		return DataResult.success(result);
 	}
 
@@ -184,7 +183,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 		final JsonObject output = new JsonObject();
 		if (map != empty()) {
-			map.getAsJsonObject().entrySet().forEach(entry -> output.put(entry.getKey(), entry.getValue()));
+			output.putAll(map.getAsJsonObject());
 		}
 		output.put(key.getAsString(), value);
 
@@ -199,7 +198,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 		final JsonObject output = new JsonObject();
 		if (map != empty()) {
-			map.getAsJsonObject().entrySet().forEach(entry -> output.put(entry.getKey(), entry.getValue()));
+			output.putAll(map.getAsJsonObject());
 		}
 
 		final List<JsonElement> missed = Lists.newArrayList();
@@ -246,19 +245,17 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 			return DataResult.error(() -> "Not a JSON object: " + input);
 		}
 		final JsonObject object = input.getAsJsonObject();
-		return DataResult.success(new MapLike<JsonElement>() {
+		return DataResult.success(new MapLike<>() {
 			@Nullable
 			@Override
 			public JsonElement get(final JsonElement key) {
-				final JsonElement element = object.get(key.getAsString());
-				return element;
+				return object.get(key.getAsString());
 			}
 
 			@Nullable
 			@Override
 			public JsonElement get(final String key) {
-				final JsonElement element = object.get(key);
-				return element;
+				return object.get(key);
 			}
 
 			@Override
@@ -283,7 +280,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 	@Override
 	public DataResult<Stream<JsonElement>> getStream(final JsonElement input) {
 		if (input instanceof JsonArray) {
-			return DataResult.success(StreamSupport.stream(input.getAsJsonArray().spliterator(), false));
+			return DataResult.success(input.getAsJsonArray().stream());
 		}
 		return DataResult.error(() -> "Not a json array: " + input);
 	}
@@ -418,12 +415,8 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 			}
 			if (prefix instanceof JsonObject) {
 				final JsonObject result = new JsonObject();
-				for (final Map.Entry<String, JsonElement> entry : prefix.getAsJsonObject().entrySet()) {
-					result.put(entry.getKey(), entry.getValue());
-				}
-				for (final Map.Entry<String, JsonElement> entry : builder.entrySet()) {
-					result.put(entry.getKey(), entry.getValue());
-				}
+				result.putAll(prefix.getAsJsonObject());
+				result.putAll(builder);
 				return DataResult.success(result);
 			}
 			return DataResult.error(() -> "mergeToMap called with not a map: " + prefix, prefix);
