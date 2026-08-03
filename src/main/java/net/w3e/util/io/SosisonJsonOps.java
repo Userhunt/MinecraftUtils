@@ -2,23 +2,13 @@ package net.w3e.util.io;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Lifecycle;
-import com.mojang.serialization.ListBuilder;
-import com.mojang.serialization.MapLike;
-import com.mojang.serialization.RecordBuilder;
-
+import com.mojang.serialization.*;
 import net.skds.lib2.io.codec.SosisonUtils;
-import net.skds.lib2.io.json.elements.JsonArray;
-import net.skds.lib2.io.json.elements.JsonBoolean;
-import net.skds.lib2.io.json.elements.JsonElement;
-import net.skds.lib2.io.json.elements.JsonNumber;
-import net.skds.lib2.io.json.elements.JsonObject;
-import net.skds.lib2.io.json.elements.JsonString;
+import net.skds.lib2.io.json.elements.*;
+import org.jetbrains.annotations.Nullable;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,31 +17,41 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.Nullable;
-
-public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement> {
-
-	public static final Codec<JsonElement> CODEC = Codec.PASSTHROUGH.comapFlatMap(
-			dynamic -> {
-				JsonElement json = dynamic.convert(SKDSJsonOps.INSTANCE).getValue();
-				return DataResult.success(json == dynamic.getValue() ? json.deepCopy() : json);
-			},
-			json -> new Dynamic<>(SKDSJsonOps.INSTANCE, json.deepCopy())
-	);
+public record SosisonJsonOps(boolean compressed) implements DynamicOps<JsonElement> {
 
 	public static <T> Codec<T> createCodec(Class<T> clazz) {
-		return CODEC.xmap(
-				data -> SosisonUtils.parseJson(data, clazz),
-				marker -> SosisonUtils.parseJson(SosisonUtils.toJson(marker), JsonElement.class)
+		return Codec.PASSTHROUGH.flatXmap(
+				dynamic -> {
+					JsonElement jsonElement = dynamic.convert(SosisonJsonOps.INSTANCE).getValue();
+					//System.out.println("read " + jsonElement);
+					return DataResult.success(SosisonUtils.parseJson(jsonElement, clazz));
+				},
+				value -> {
+					String v = SosisonUtils.getCompactRegistry().getSerializer(clazz).toJson(value);
+					//System.out.println("write " + v);
+					JsonElement json = SosisonUtils.parseJson(v, JsonElement.class);
+					//System.out.println("write " + json);
+					return DataResult.success(new Dynamic<>(SosisonJsonOps.INSTANCE, json));
+				}
 		);
 	}
 
-	public static final SKDSJsonOps INSTANCE = new SKDSJsonOps(false);
-	public static final SKDSJsonOps COMPRESSED = new SKDSJsonOps(true);
+	public static final SosisonJsonOps INSTANCE = new SosisonJsonOps(false);
+	public static final SosisonJsonOps COMPRESSED = new SosisonJsonOps(true);
 
 	@Override
 	public JsonElement empty() {
 		return JsonElement.NULL;
+	}
+
+	@Override
+	public JsonElement emptyMap() {
+		return new JsonObject();
+	}
+
+	@Override
+	public JsonElement emptyList() {
+		return new JsonArray();
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (input instanceof JsonArray) {
 			return convertList(outOps, input);
 		}
-		if (input == JsonElement.NULL) {
+		if (input == JsonElement.NULL || input == null) {
 			return outOps.empty();
 		}
 		if (input instanceof JsonString) {
@@ -71,40 +71,40 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (input instanceof JsonBoolean) {
 			return outOps.createBoolean(input.getAsBoolean());
 		}
-		if (input instanceof JsonNumber jsonNumber) {
-			Number value = jsonNumber.value().longValue();
-			long l = value.longValue();
-			if (value.byteValue() == l) {
+		BigDecimal value = new BigDecimal(String.valueOf(input.getAsNumber()));
+		try {
+			final long l = value.longValueExact();
+			if ((byte) l == l) {
 				return outOps.createByte((byte) l);
 			}
-			if (value.shortValue() == l) {
+			if ((short) l == l) {
 				return outOps.createShort((short) l);
 			}
-			if (value.intValue() == l) {
+			if ((int) l == l) {
 				return outOps.createInt((int) l);
 			}
-			if (value instanceof Long) {
-				return outOps.createLong((int) l);
-			}
+			return outOps.createLong(l);
+		} catch (final ArithmeticException e) {
 			final double d = value.doubleValue();
 			if ((float) d == d) {
 				return outOps.createFloat((float) d);
 			}
 			return outOps.createDouble(d);
 		}
-		return outOps.empty();
 	}
 
 	@Override
 	public DataResult<Number> getNumberValue(final JsonElement input) {
-		if (input instanceof JsonNumber) {
-			return DataResult.success(input.getAsNumber());
-		}
-		if (compressed && input instanceof JsonString) {
-			try {
-				return DataResult.success(Integer.parseInt(input.getAsString()));
-			} catch (final NumberFormatException e) {
-				return DataResult.error(() -> "Not a number: " + e + " " + input);
+		if (input.isJsonPrimitive()) {
+			if (input instanceof JsonNumber) {
+				return DataResult.success(input.getAsNumber());
+			}
+			if (compressed && input instanceof JsonString) {
+				try {
+					return DataResult.success(Integer.parseInt(input.getAsString()));
+				} catch (final NumberFormatException e) {
+					return DataResult.error(() -> "Not a number: " + e + " " + input);
+				}
 			}
 		}
 		return DataResult.error(() -> "Not a number: " + input);
@@ -117,7 +117,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 	@Override
 	public DataResult<Boolean> getBooleanValue(final JsonElement input) {
-		if (input instanceof JsonBoolean) {
+		if (input.isJsonPrimitive() && input instanceof JsonBoolean) {
 			return DataResult.success(input.getAsBoolean());
 		}
 		return DataResult.error(() -> "Not a boolean: " + input);
@@ -125,16 +125,18 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 	@Override
 	public JsonElement createBoolean(final boolean value) {
-		return new JsonBoolean(value);
+		return JsonBoolean.valueOf(value);
 	}
 
 	@Override
 	public DataResult<String> getStringValue(final JsonElement input) {
-		if (input instanceof JsonString) {
-			return DataResult.success(input.getAsString());
-		}
-		if (input instanceof JsonNumber jsonNumber && compressed) {
-			return DataResult.success(String.valueOf(jsonNumber.getAsNumber()));
+		if (input.isJsonPrimitive()) {
+			if (input instanceof JsonString) {
+				return DataResult.success(input.getAsString());
+			}
+			if (compressed && input instanceof JsonNumber) {
+				return DataResult.success(String.valueOf(input.getAsNumber()));
+			}
 		}
 		return DataResult.error(() -> "Not a string: " + input);
 	}
@@ -164,6 +166,13 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 			return DataResult.error(() -> "mergeToList called with not a list: " + list, list);
 		}
 
+		if (values.isEmpty()) {
+			if (list == empty()) {
+				return DataResult.success(emptyList());
+			}
+			return DataResult.success(list);
+		}
+
 		final JsonArray result = new JsonArray();
 		if (list != empty()) {
 			result.addAll(list.getAsJsonArray());
@@ -177,7 +186,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (!(map instanceof JsonObject) && map != empty()) {
 			return DataResult.error(() -> "mergeToMap called with not a map: " + map, map);
 		}
-		if (!(key instanceof JsonString) || !compressed) {
+		if (!(key.isJsonPrimitive()) || !compressed && !(key instanceof JsonString)) {
 			return DataResult.error(() -> "key is not a string: " + key, map);
 		}
 
@@ -196,6 +205,13 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 			return DataResult.error(() -> "mergeToMap called with not a map: " + map, map);
 		}
 
+		final Iterator<Pair<JsonElement, JsonElement>> valuesIterator = values.entries().iterator();
+		if (!valuesIterator.hasNext()) {
+			if (map == empty()) {
+				return DataResult.success(emptyMap());
+			}
+			return DataResult.success(map);
+		}
 		final JsonObject output = new JsonObject();
 		if (map != empty()) {
 			output.putAll(map.getAsJsonObject());
@@ -203,9 +219,9 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 		final List<JsonElement> missed = Lists.newArrayList();
 
-		values.entries().forEach(entry -> {
+		valuesIterator.forEachRemaining(entry -> {
 			final JsonElement key = entry.getFirst();
-			if (!(key instanceof JsonString) || !compressed) {
+			if (!(key.isJsonPrimitive()) || !compressed && !(key instanceof JsonString)) {
 				missed.add(key);
 				return;
 			}
@@ -224,7 +240,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (!(input instanceof JsonObject)) {
 			return DataResult.error(() -> "Not a JSON object: " + input);
 		}
-		return DataResult.success(input.getAsJsonObject().entrySet().stream().map(entry -> Pair.of(new JsonString(entry.getKey()), entry.getValue())));
+		return DataResult.success(input.getAsJsonObject().entrySet().stream().map(entry -> Pair.of(new JsonString(entry.getKey()), entry.getValue() == JsonElement.NULL ? null : entry.getValue())));
 	}
 
 	@Override
@@ -234,7 +250,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		}
 		return DataResult.success(c -> {
 			for (final Map.Entry<String, JsonElement> entry : input.getAsJsonObject().entrySet()) {
-				c.accept(createString(entry.getKey()), entry.getValue());
+				c.accept(createString(entry.getKey()), entry.getValue() == JsonElement.NULL ? null : entry.getValue());
 			}
 		});
 	}
@@ -249,13 +265,21 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 			@Nullable
 			@Override
 			public JsonElement get(final JsonElement key) {
-				return object.get(key.getAsString());
+				final JsonElement element = object.get(key.getAsString());
+				if (element == JsonElement.NULL) {
+					return null;
+				}
+				return element;
 			}
 
 			@Nullable
 			@Override
 			public JsonElement get(final String key) {
-				return object.get(key);
+				final JsonElement element = object.get(key);
+				if (element == JsonElement.NULL) {
+					return null;
+				}
+				return element;
 			}
 
 			@Override
@@ -280,7 +304,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 	@Override
 	public DataResult<Stream<JsonElement>> getStream(final JsonElement input) {
 		if (input instanceof JsonArray) {
-			return DataResult.success(input.getAsJsonArray().stream());
+			return DataResult.success(input.getAsJsonArray().stream().map(e -> e == JsonElement.NULL ? null : e));
 		}
 		return DataResult.error(() -> "Not a json array: " + input);
 	}
@@ -290,7 +314,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 		if (input instanceof JsonArray) {
 			return DataResult.success(c -> {
 				for (final JsonElement element : input.getAsJsonArray()) {
-					c.accept(element);
+					c.accept(element == JsonElement.NULL ? null : element);
 				}
 			});
 		}
@@ -394,7 +418,7 @@ public record SKDSJsonOps(boolean compressed) implements DynamicOps<JsonElement>
 
 	private class JsonRecordBuilder extends RecordBuilder.AbstractStringBuilder<JsonElement, JsonObject> {
 		protected JsonRecordBuilder() {
-			super(SKDSJsonOps.this);
+			super(SosisonJsonOps.this);
 		}
 
 		@Override
