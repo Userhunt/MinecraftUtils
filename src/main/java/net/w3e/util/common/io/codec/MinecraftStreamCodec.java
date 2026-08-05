@@ -1,4 +1,4 @@
-package net.w3e.util.io.codec;
+package net.w3e.util.common.io.codec;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

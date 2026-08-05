@@ -1,4 +1,4 @@
-package net.w3e.util;
+package net.w3e.util.common;
 
 import net.minecraft.world.entity.Display;
 import net.skds.lib2.mat.FastMath;

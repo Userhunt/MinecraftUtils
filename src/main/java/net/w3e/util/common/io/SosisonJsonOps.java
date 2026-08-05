@@ -1,4 +1,4 @@
-package net.w3e.util.io;
+package net.w3e.util.common.io;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;

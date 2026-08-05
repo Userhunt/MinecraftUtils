@@ -1,9 +1,9 @@
-package net.w3e.util.io.codec;
+package net.w3e.util.common.io.codec;
 
 import com.mojang.serialization.Codec;
 import net.skds.lib2.io.codec.*;
 import net.skds.lib2.io.json.elements.JsonElement;
-import net.w3e.util.io.SosisonJsonOps;
+import net.w3e.util.common.io.SosisonJsonOps;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package net.w3e.util.io;
+package net.w3e.util.common.io;
 
 import java.util.TreeMap;
 import java.util.Map.Entry;

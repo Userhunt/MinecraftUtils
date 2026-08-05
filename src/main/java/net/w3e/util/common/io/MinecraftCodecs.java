@@ -1,4 +1,4 @@
-package net.w3e.util.io;
+package net.w3e.util.common.io;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.serialization.Codec;
@@ -12,8 +12,8 @@ import net.skds.lib2.io.json.elements.JsonArray;
 import net.skds.lib2.io.json.elements.JsonElement;
 import net.skds.lib2.io.json.elements.JsonObject;
 import net.w3e.lib.ObjectWrapper;
-import net.w3e.util.io.codec.MinecraftCodecWrapper;
-import net.w3e.util.io.codec.MinecraftStreamCodec;
+import net.w3e.util.common.io.codec.MinecraftCodecWrapper;
+import net.w3e.util.common.io.codec.MinecraftStreamCodec;
 
 public class MinecraftCodecs {
 
