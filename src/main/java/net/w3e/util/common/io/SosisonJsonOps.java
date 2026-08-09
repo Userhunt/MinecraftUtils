@@ -3,7 +3,6 @@ package net.w3e.util.common.io;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
-import net.skds.lib2.io.codec.SosisonUtils;
 import net.skds.lib2.io.json.elements.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,23 +17,6 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public record SosisonJsonOps(boolean compressed) implements DynamicOps<JsonElement> {
-
-	public static <T> Codec<T> createCodec(Class<T> clazz) {
-		return Codec.PASSTHROUGH.flatXmap(
-				dynamic -> {
-					JsonElement jsonElement = dynamic.convert(SosisonJsonOps.INSTANCE).getValue();
-					//System.out.println("read " + jsonElement);
-					return DataResult.success(SosisonUtils.parseJson(jsonElement, clazz));
-				},
-				value -> {
-					String v = SosisonUtils.getCompactRegistry().getSerializer(clazz).toJson(value);
-					//System.out.println("write " + v);
-					JsonElement json = SosisonUtils.parseJson(v, JsonElement.class);
-					//System.out.println("write " + json);
-					return DataResult.success(new Dynamic<>(SosisonJsonOps.INSTANCE, json));
-				}
-		);
-	}
 
 	public static final SosisonJsonOps INSTANCE = new SosisonJsonOps(false);
 	public static final SosisonJsonOps COMPRESSED = new SosisonJsonOps(true);

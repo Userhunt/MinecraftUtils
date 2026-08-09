@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "net.w3e.util.client.mixins",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": ["GridLayoutAccessor", "LinearLayoutAccessor"],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

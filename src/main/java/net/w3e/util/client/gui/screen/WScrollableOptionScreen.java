@@ -1,29 +1,31 @@
-package net.w3e.util.client.gui;
+package net.w3e.util.client.gui.screen;
 
 import lombok.AccessLevel;
 import lombok.Setter;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.ScrollableLayout;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.w3e.util.client.gui.container.WScrollableLayoutContainer;
+import net.w3e.util.client.gui.layout.WLayoutUtils;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class ScrollableOptionScreen<E> extends Screen {
+public abstract class WScrollableOptionScreen<E> extends Screen {
 
 	private EditBox searchBox;
 	private FrameLayout layout;
-	private ScrollableLayout bodyScroll;
+	private LinearLayout body;
+	private WScrollableLayoutContainer bodyScroll;
 	protected final Map<Object, E> options = new HashMap<>();
 	@Setter(AccessLevel.PROTECTED)
 	private String query = "";
 
-	protected ScrollableOptionScreen(Component title) {
+	protected WScrollableOptionScreen(Component title) {
 		super(title);
 	}
 
@@ -32,6 +34,17 @@ public abstract class ScrollableOptionScreen<E> extends Screen {
 		super.init();
 		this.searchBox = new EditBox(this.font, 0, 0, 150, 20, Component.literal("Поиск..."));
 		this.searchBox.setResponder(e -> this.updateSearchResult(e, false));
+
+		this.layout = new FrameLayout();
+		this.layout.defaultChildLayoutSetting().alignHorizontallyCenter().alignVerticallyTop().padding(10);
+		this.layout.addChild(this.searchBox);
+
+		this.body = LinearLayout.vertical().spacing(10);
+		this.body.defaultCellSetting().alignHorizontallyCenter();
+
+		this.bodyScroll = new WScrollableLayoutContainer(body, this.height - 40);
+		this.layout.addChild(this.bodyScroll, setting -> setting.alignHorizontallyCenter().alignVerticallyTop().paddingTop(35));
+
 		this.updateSearchResult(this.query, true);
 	}
 
@@ -43,24 +56,12 @@ public abstract class ScrollableOptionScreen<E> extends Screen {
 		this.query = query;
 		this.clearWidgets();
 
-		this.layout = new FrameLayout();
-		this.layout.defaultChildLayoutSetting().alignHorizontallyCenter().alignVerticallyTop().padding(10);
-		this.layout.addChild(this.searchBox);
-
-		var body = LinearLayout.vertical().spacing(10);
-		body.defaultCellSetting().alignHorizontallyCenter();
-
+		WLayoutUtils.clear(this.body);
 		String lowerQuery = query.toLowerCase(Locale.ROOT);
+		fillBody(query, lowerQuery, this.body, init);
 
-		fillBody(query, lowerQuery, body, init);
-
-		int availableHeight = this.height - 40;
-		this.bodyScroll = new ScrollableLayout(this.minecraft, body, availableHeight);
-
-		this.layout.addChild(this.bodyScroll, setting -> setting.alignHorizontallyCenter().alignVerticallyTop().paddingTop(35));
-
-		this.layout.visitWidgets(this::addRenderableWidget);
-		body.visitWidgets(this::addWidget);
+		this.addRenderableWidget(this.searchBox);
+		this.bodyScroll.visitWidgets(this::addRenderableWidget);
 
 		this.repositionElements();
 	}

@@ -6,11 +6,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.skds.lib2.io.codec.SosisonUtils;
 import net.skds.lib2.io.codec.UniversalCodec;
 
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 
 public record MinecraftStreamCodec<T>(UniversalCodec<T> codec) implements StreamCodec<ByteBuf, T> {
 
-	public MinecraftStreamCodec(Class<T> clazz) {
+	public MinecraftStreamCodec(Type clazz) {
 		this(SosisonUtils.getCompactRegistry().getCodecIndirect(clazz));
 	}
 
