@@ -20,13 +20,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class WAbstractLayoutContainer extends AbstractWidget implements WLayout {
+public abstract class WAbstractLayout extends AbstractWidget implements WLayout {
 
 	@Setter
 	@Getter
 	private boolean scissor = false;
 
-	public WAbstractLayoutContainer() {
+	public WAbstractLayout() {
 		super(0, 0, -1, -1, CommonComponents.EMPTY);
 	}
 

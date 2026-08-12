@@ -1,4 +1,4 @@
-package net.w3e.util.client.gui.layout;
+package net.w3e.util.client.gui.container;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,12 +8,15 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.w3e.util.client.gui.layout.WAbstractLayout;
+import net.w3e.util.client.gui.layout.WLayout;
+import net.w3e.util.client.gui.layout.WLayoutElementData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class WLayoutSimpleContainer extends WAbstractLayoutContainer {
+public class WLayoutSimpleContainer extends WAbstractLayout {
 
 	@Getter(onMethod_ = @Override)
 	@Setter(onMethod_ = @Override)

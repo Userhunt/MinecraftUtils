@@ -17,18 +17,28 @@ public record MinecraftStreamCodec<T>(UniversalCodec<T> codec) implements Stream
 
 	@Override
 	public void encode(ByteBuf output, T value) {
-		String jsonStr = this.codec.toJson(value);
-		//System.out.println("write " + jsonStr);
-		byte[] bytes = jsonStr.getBytes(StandardCharsets.UTF_8);
-		ByteBufCodecs.BYTE_ARRAY.encode(output, bytes);
+		try {
+			String jsonStr = this.codec.toJson(value);
+			//System.out.println("write " + jsonStr);
+			byte[] bytes = jsonStr.getBytes(StandardCharsets.UTF_8);
+			ByteBufCodecs.BYTE_ARRAY.encode(output, bytes);
+		} catch (Exception e) {
+			System.err.println(value);
+			throw e;
+		}
 	}
 
 	@Override
 	public T decode(ByteBuf input) {
 		byte[] bytes = ByteBufCodecs.BYTE_ARRAY.decode(input);
 		String jsonStr = new String(bytes, StandardCharsets.UTF_8);
-		//System.out.println("read " + jsonStr);
-		return this.codec.parse(jsonStr);
+		try {
+			//System.out.println("read " + jsonStr);
+			return this.codec.parse(jsonStr);
+		} catch (Exception e) {
+			System.err.println(jsonStr);
+			throw e;
+		}
 	}
 
 }
