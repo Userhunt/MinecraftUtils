@@ -1,8 +1,8 @@
 package net.w3e.util.client.gui.layout;
 
 import net.minecraft.client.gui.layouts.LinearLayout;
-import net.w3e.util.client.mixins.GridLayoutAccessor;
-import net.w3e.util.client.mixins.LinearLayoutAccessor;
+import net.w3e.util.mixins.client.GridLayoutAccessor;
+import net.w3e.util.mixins.client.LinearLayoutAccessor;
 
 public class WLayoutUtils {
 

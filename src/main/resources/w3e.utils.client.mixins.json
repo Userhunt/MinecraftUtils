@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "net.w3e.util.client.mixins",
+	"package": "net.w3e.util.mixins.client",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": ["GridLayoutAccessor", "LinearLayoutAccessor"],
 	"injectors": {

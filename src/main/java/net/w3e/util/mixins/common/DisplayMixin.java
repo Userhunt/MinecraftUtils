@@ -1,4 +1,4 @@
-package net.w3e.util.common.mixins;
+package net.w3e.util.mixins.common;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Display;

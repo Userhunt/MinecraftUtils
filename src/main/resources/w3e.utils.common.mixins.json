@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "net.w3e.util.common.mixins",
+	"package": "net.w3e.util.mixins.common",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": ["DisplayMixin"],
 	"injectors": {

@@ -1,4 +1,4 @@
-package net.w3e.util.client.mixins;
+package net.w3e.util.mixins.client;
 
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
