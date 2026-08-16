@@ -1,3 +1,52 @@
+rootProject.tasks.register("generateMergedClassTweaker") {
+    group = "custom"
+
+    def sourceFiles = files()
+
+    rootProject.subprojects.each { sub ->
+        sourceFiles.from(sub.fileTree(dir: "src/main/resources", include: "*.classtweaker"))
+    }
+
+    def mergedFile = new File(rootProject.projectDir, "modules/common/src/main/generated/${rootProject.name}.classtweaker")
+    //sourceFiles = sourceFiles - mergedFile
+
+    inputs.files(sourceFiles)
+    outputs.file(mergedFile)
+
+    println(rootProject.name)
+    println(mergedFile)
+    println(sourceFiles)
+
+    doLast {
+        mergedFile.parentFile.mkdirs()
+        mergedFile.withWriter("UTF-8") { writer ->
+            writer.writeLine("classTweaker v1 official")
+            sourceFiles.each { f ->
+                writer.writeLine("# " + f.name)
+                f.eachLine("UTF-8") { line ->
+                    if (line.startsWith("classTweaker")) {
+                        return
+                    }
+                    if (line.startsWith("#")) {
+                        line = "#" + line
+                    }
+                    writer.writeLine(line)
+                }
+                writer.writeLine("")
+            }
+        }
+        File modules = new File(rootProject.projectDir, "modules/")
+        println(modules)
+        for (String name : rootProject.enabled_platforms.split(',')) {
+            copy {
+                from(mergedFile)
+                into(new File(modules, name + "/src/main/generated/"))
+            }
+        }
+    }
+
+}
+
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.40'
     annotationProcessor 'org.projectlombok:lombok:1.18.40'
