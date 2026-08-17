@@ -23,18 +23,18 @@ public class WScrollableLayoutContainer extends WLayoutProviderContainer impleme
 
 	@Override
 	public void setContentX(final int x) {
-		this.content.setX(x + (this.reserveStrategy == ScrollableLayout.ReserveStrategy.BOTH ? this.scrollbarReserve() : 0));
+		this.contents.setX(x + (this.reserveStrategy == ScrollableLayout.ReserveStrategy.BOTH ? this.scrollbarReserve() : 0));
 	}
 
 	@Override
 	public void setContentY(final int y) {
-		this.content.setY(y - (int) this.scrollAmount());
+		this.contents.setY(y - (int) this.scrollAmount());
 	}
 
 	@Override
 	public void arrangeElements() {
 		super.arrangeElements();
-		int contentWidth = this.content.getWidth();
+		int contentWidth = this.contents.getWidth();
 
 		int scrollbarReserve = switch (this.reserveStrategy) {
 			case RIGHT -> this.scrollbarReserve();
@@ -75,7 +75,7 @@ public class WScrollableLayoutContainer extends WLayoutProviderContainer impleme
 	@Override
 	public void setScrollAmount(final double scrollAmount) {
 		super.setScrollAmount(scrollAmount);
-		this.content.setY(this.getRectangle().top() - (int) this.scrollAmount());
+		this.contents.setY(this.getRectangle().top() - (int) this.scrollAmount());
 	}
 
 }

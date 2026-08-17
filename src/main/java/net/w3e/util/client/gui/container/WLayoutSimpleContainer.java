@@ -168,9 +168,6 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 
 	@Override
 	public void setFocused(boolean focused) {
-		if (!focused) {
-			this.setFocused(null);
-		}
 		super.setFocused(focused);
 	}
 

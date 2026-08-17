@@ -1,7 +1,8 @@
-package net.w3e.util.common;
+package net.w3e.util.mixins;
 
 import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.mat.vec3.Vec3;
+import net.w3e.util.common.MinecraftHelper;
 import org.joml.Quaternionfc;
 import org.joml.Vector3fc;
 

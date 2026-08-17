@@ -3,7 +3,7 @@ package net.w3e.util.mixins.common;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
-import net.w3e.util.common.DisplayAccessor;
+import net.w3e.util.mixins.DisplayAccessor;
 import org.joml.Quaternionfc;
 import org.joml.Vector3fc;
 import org.spongepowered.asm.mixin.Final;

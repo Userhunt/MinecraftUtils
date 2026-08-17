@@ -15,6 +15,8 @@ import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.chat.CommonComponents;
 import net.w3e.util.client.gui.layout.WLayout;
+import net.w3e.util.mixins.client.AbstractWidgetAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +26,7 @@ import java.util.function.Consumer;
 
 public class WLayoutProviderContainer extends AbstractContainerWidget implements WLayout {
 
-	protected final Layout content;
+	protected final Layout contents;
 	@Getter(AccessLevel.PROTECTED)
 	private int minWidth;
 	@Getter(AccessLevel.PROTECTED)
@@ -34,25 +36,36 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 
 	private final List<AbstractWidget> children = new ArrayList<>();
 
-	public WLayoutProviderContainer(final Layout content, final int maxHeight) {
+	public WLayoutProviderContainer(final Layout contents, final int maxHeight) {
 		super(0, 0, 0, maxHeight, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(10));
-		this.content = content;
+		this.contents = contents;
 		this.maxHeight = maxHeight;
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		((AbstractWidgetAccessor) this).w3e$setFocused(focused);
+	}
+
+	@Override
+	public void setFocused(@Nullable GuiEventListener focused) {
+		this.setFocused(focused != null);
+		super.setFocused(focused);
 	}
 
 	public final void setMinWidth(final int minWidth) {
 		this.minWidth = minWidth;
-		this.setWidth(Math.max(this.content.getWidth(), minWidth));
+		this.setWidth(Math.max(this.contents.getWidth(), minWidth));
 	}
 
 	public final void setMinHeight(final int minHeight) {
 		this.minHeight = minHeight;
-		this.setHeight(Math.max(this.content.getHeight(), minHeight));
+		this.setHeight(Math.max(this.contents.getHeight(), minHeight));
 	}
 
 	public final void setMaxHeight(final int maxHeight) {
 		this.maxHeight = maxHeight;
-		this.setHeight(Math.min(this.content.getHeight(), maxHeight));
+		this.setHeight(Math.min(this.contents.getHeight(), maxHeight));
 		this.refreshScrollAmount();
 	}
 
@@ -63,7 +76,7 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 	}
 
 	protected void setContentX(final int x) {
-		this.content.setX(x);
+		this.contents.setX(x);
 	}
 
 	@Override
@@ -73,17 +86,17 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 	}
 
 	protected void setContentY(final int y) {
-		this.content.setY(y);
+		this.contents.setY(y);
 	}
 
 	@Override
 	public void arrangeElements() {
-		this.content.arrangeElements();
+		this.contents.arrangeElements();
 		this.children.clear();
-		this.content.visitWidgets(this.children::add);
+		this.contents.visitWidgets(this.children::add);
 
-		this.setWidth(Math.max(this.content.getWidth(), this.minWidth));
-		this.setHeight(Math.clamp(this.content.getHeight(), this.minHeight, this.maxHeight));
+		this.setWidth(Math.max(this.contents.getWidth(), this.minWidth));
+		this.setHeight(Math.clamp(this.contents.getHeight(), this.minHeight, this.maxHeight));
 	}
 
 	@Override
@@ -98,7 +111,7 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 
 	@Override
 	protected final int contentHeight() {
-		return this.content.getHeight();
+		return this.contents.getHeight();
 	}
 
 	@Override
