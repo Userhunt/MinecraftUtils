@@ -17,7 +17,7 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
-		LinearLayout posLayout = LinearLayout.horizontal().spacing(5);
+		LinearLayout valueLayout = LinearLayout.horizontal().spacing(5);
 		EditBox editBox;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
@@ -29,7 +29,7 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
 		editBox.setValue(String.valueOf(this.value.y()));
@@ -40,7 +40,7 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
 		editBox.setValue(String.valueOf(this.value.z()));
@@ -51,9 +51,9 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
-		this.addChild(new WLayoutProviderContainer(posLayout, 20));
+		this.addChild(new WLayoutProviderContainer(valueLayout, 20));
 	}
 
 }

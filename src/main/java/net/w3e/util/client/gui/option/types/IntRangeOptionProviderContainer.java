@@ -16,7 +16,7 @@ public class IntRangeOptionProviderContainer<OBJECT> extends OptionProviderConta
 		super(provider, container);
 
 		var args = this.provider.getArgs();
-		var range = args.args();
+		var range = args.value();
 		NumberRangeInput.RangeInfo rangeInfo = new NumberRangeInput.RangeInfo(range.min(), range.max(), Optional.of(this.value.floatValue()), Optional.of(range.step()));
 		var slider = new WSlider(0, 0, 120, 20,
 				e -> args.textGetter().apply(this.provider.getTitle().copy(), FastMath.round(e)), rangeInfo, e -> this.value = FastMath.round(e)

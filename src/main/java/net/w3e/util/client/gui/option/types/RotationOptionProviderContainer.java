@@ -24,7 +24,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
-		LinearLayout posLayout = LinearLayout.horizontal().spacing(5);
+		LinearLayout valueLayout = LinearLayout.horizontal().spacing(5);
 		EditBox editBox;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
@@ -36,7 +36,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
 		if (this.value.hasPitch()) {
 			editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
@@ -48,10 +48,10 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 				} catch (Exception _) {
 				}
 			});
-			posLayout.addChild(editBox);
+			valueLayout.addChild(editBox);
 		}
 
-		posLayout.addChild(Button.builder(Component.literal("Настроить"), _ -> {
+		valueLayout.addChild(Button.builder(Component.literal("Настроить"), _ -> {
 			Vec3OptionProviderContainer<OBJECT> posContainer = (Vec3OptionProviderContainer<OBJECT>) this.container.options().getFirst();
 			var posOption = posContainer.getValue();
 			Minecraft minecraft = Minecraft.getInstance();
@@ -60,7 +60,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 			minecraft.setScreen(new EditRotationScreen());
 		}).width(100).build());
 
-		this.addChild(new WLayoutProviderContainer(posLayout, 20));
+		this.addChild(new WLayoutProviderContainer(valueLayout, 20));
 	}
 
 	public class EditRotationScreen extends Screen implements OptionProviderScreen<OBJECT> {

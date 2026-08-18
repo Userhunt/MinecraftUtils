@@ -16,7 +16,7 @@ public class EnumOptionProviderContainer<E, OBJECT> extends OptionProviderContai
 
 		var args = this.provider.getArgs();
 		this.addChild(CycleButton.builder(e -> args.textGetter().apply(null, (E) e), this.value)
-				.withValues(args.args().toArray())
+				.withValues(args.value().toArray())
 				.create(provider.getTitle(), (_, v) -> this.value = v)
 		);
 	}

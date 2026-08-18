@@ -67,10 +67,6 @@ public class OptionProviderContainer<ARGS, OBJECT, VALUE> extends WLayoutProvide
 		this.value = this.valueCache;
 	}
 
-	protected void addChild(LayoutElement widget) {
-		((LinearLayout) this.contents).addChild(widget);
-	}
-
 	public boolean equals() {
 		return this.provider.equals(this.valueCache, this.value);
 	}

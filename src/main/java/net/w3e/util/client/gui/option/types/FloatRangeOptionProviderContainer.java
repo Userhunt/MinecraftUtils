@@ -15,7 +15,7 @@ public class FloatRangeOptionProviderContainer<OBJECT> extends OptionProviderCon
 		super(provider, container);
 
 		var args = this.provider.getArgs();
-		var range = args.args();
+		var range = args.value();
 		NumberRangeInput.RangeInfo rangeInfo = new NumberRangeInput.RangeInfo(range.min(), range.max(), Optional.of(this.value), Optional.of(range.step()));
 		var slider = new WSlider(0, 0, 120, 20,
 				e -> args.textGetter().apply(this.provider.getTitle().copy(), e), rangeInfo, e -> this.value = e

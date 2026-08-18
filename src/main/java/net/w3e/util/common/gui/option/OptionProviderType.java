@@ -9,6 +9,8 @@ import net.skds.lib2.mat.vec3.Vec3;
 import net.w3e.util.client.gui.option.OptionProviderContainer;
 import net.w3e.util.client.gui.option.types.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public abstract class OptionProviderType<VALUE> {
 
@@ -102,5 +104,18 @@ public abstract class OptionProviderType<VALUE> {
 			return new BooleanOptionProviderContainer<>(provider, container, font);
 		}
 	};
+
+	@SuppressWarnings("unused")
+	public static final OptionProviderType<List<?>> FLAGS = new OptionProviderType<>("flags") {
+		@Override
+		public <OBJECT> OptionProviderContainer<?, OBJECT, List<?>> createOption(OptionProvider<?, OBJECT, ?, List<?>> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Font font) {
+			return new FlagsOptionProviderContainer<>(provider, container, font);
+		}
+	};
+
+	@SuppressWarnings("unchecked")
+	public static <E> OptionProviderType<List<E>> getFlags() {
+		return (OptionProviderType<List<E>>) (OptionProviderType<?>) FLAGS;
+	}
 
 }

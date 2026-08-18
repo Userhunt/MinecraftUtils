@@ -4,14 +4,18 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.BiFunction;
 
-public record RangeOption<VALUE, E>(BiFunction<Component, VALUE, Component> textGetter, E args) {
+public record RangeOption<VALUE, E>(BiFunction<Component, VALUE, Component> textGetter, E value) {
 
-	public static <VALUE, E> RangeOption<VALUE, E> ofRange(E args) {
-		return new RangeOption<>((title, value) -> title.copy().append(": " + value.toString()), args);
+	public static <VALUE, E> RangeOption<VALUE, E> ofRange(E value) {
+		return new RangeOption<>((title, v) -> title.copy().append(": " + v.toString()), value);
 	}
 
-	public static <VALUE, E> RangeOption<VALUE, E> ofCycle(E args) {
-		return new RangeOption<>((_, value) -> Component.literal(value.toString()), args);
+	public static <VALUE, E> RangeOption<VALUE, E> ofCycle(E value) {
+		return new RangeOption<>((_, v) -> Component.literal(v.toString()), value);
+	}
+
+	public static <VALUE, E> RangeOption<VALUE, E> ofFlags(E value) {
+		return new RangeOption<>((_, v) -> Component.literal(v.toString()), value);
 	}
 
 }

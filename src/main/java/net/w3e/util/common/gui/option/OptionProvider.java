@@ -35,8 +35,8 @@ public class OptionProvider<ARGS, OBJECT, VALUE_HOLDER, VALUE> implements Compar
 	@Getter(AccessLevel.PACKAGE)
 	private final BiPredicate<VALUE, VALUE> equals;
 
-	public OptionProvider(OptionProviderType<VALUE> type, Component title, ARGS args, Function<OBJECT, VALUE_HOLDER> valueHolderGetter, Function<VALUE_HOLDER, VALUE> getter, BiConsumer<VALUE_HOLDER, VALUE> setter) {
-		this(type, 0, title, args, valueHolderGetter, getter, setter, Objects::equals);
+	public OptionProvider(OptionProviderType<VALUE> type, Component title, ARGS args, Function<OBJECT, VALUE_HOLDER> converter, Function<VALUE_HOLDER, VALUE> getter, BiConsumer<VALUE_HOLDER, VALUE> setter) {
+		this(type, 0, title, args, converter, getter, setter, Objects::equals);
 	}
 
 	@SuppressWarnings("unchecked")

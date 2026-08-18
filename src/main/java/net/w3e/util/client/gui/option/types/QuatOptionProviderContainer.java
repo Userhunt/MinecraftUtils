@@ -21,7 +21,7 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
-		LinearLayout posLayout = LinearLayout.horizontal().spacing(5);
+		LinearLayout valueLayout = LinearLayout.horizontal().spacing(5);
 		EditBox editBox;
 		var angles = MatrixUtil.getYPR(this.value).scale(100);
 
@@ -41,7 +41,7 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
 		editBox.setValue(String.valueOf(this.pitch));
@@ -55,7 +55,7 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
 		editBox.setValue(String.valueOf(this.roll));
@@ -69,9 +69,9 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 			} catch (Exception _) {
 			}
 		});
-		posLayout.addChild(editBox);
+		valueLayout.addChild(editBox);
 
-		this.addChild(posLayout);
+		this.addChild(valueLayout);
 	}
 
 }

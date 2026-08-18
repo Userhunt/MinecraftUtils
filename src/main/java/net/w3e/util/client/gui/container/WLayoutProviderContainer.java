@@ -9,6 +9,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.gui.layouts.LayoutSettings;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenDirection;
@@ -40,6 +42,18 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 		super(0, 0, 0, maxHeight, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(10));
 		this.contents = contents;
 		this.maxHeight = maxHeight;
+	}
+
+	protected <T extends LayoutElement> T addChild(T element) {
+		return ((LinearLayout) this.contents).addChild(element);
+	}
+
+	protected <T extends LayoutElement> T addChild(T element, final Consumer<LayoutSettings> layoutSettingsAdjustments) {
+		return ((LinearLayout) this.contents).addChild(element, layoutSettingsAdjustments);
+	}
+
+	protected <T extends LayoutElement> T addChild(T element, final LayoutSettings cellSettings) {
+		return ((LinearLayout) this.contents).addChild(element, cellSettings);
 	}
 
 	@Override

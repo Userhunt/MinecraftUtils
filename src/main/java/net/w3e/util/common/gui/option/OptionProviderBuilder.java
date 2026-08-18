@@ -12,6 +12,7 @@ import net.w3e.util.client.gui.option.types.RotationOptionProviderContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER>> {
@@ -79,11 +80,25 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 	}
 
 	public BUILDER addRotation(Component title, Function<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> getter, BiConsumer<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> setter) {
-		return this.add(new OptionProvider<>(OptionProviderType.ROTATION, Component.literal("Поворот"), null, this.converter, getter, setter));
+		return this.add(new OptionProvider<>(OptionProviderType.ROTATION, title, null, this.converter, getter, setter));
 	}
 
 	public BUILDER addDirection(Component title, Function<VALUE_HOLDER, Direction> getter, BiConsumer<VALUE_HOLDER, Direction> setter) {
-		return this.addEnum(Component.literal("Direction"), List.of(Direction.VALUES), getter, setter);
+		return this.addEnum(title, List.of(Direction.VALUES), getter, setter);
+	}
+
+	public <E> BUILDER addFlags(Component title, List<E> flags, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
+		return this.addFlags(title, RangeOption.ofFlags(flags), getter, setter);
+	}
+
+	public <E> BUILDER addFlags(Component title, RangeOption<E, List<E>> flags, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
+		return this.add(new OptionProvider<>(OptionProviderType.getFlags(), title, flags, this.converter, getter, setter));
+	}
+
+	@SuppressWarnings("unchecked")
+	public BUILDER apply(Consumer<BUILDER> consumer) {
+		consumer.accept((BUILDER) this);
+		return (BUILDER) this;
 	}
 
 	@SuppressWarnings("unchecked")

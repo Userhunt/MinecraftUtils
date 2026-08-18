@@ -24,17 +24,25 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 	@Getter(onMethod_ = @Override)
 	private GuiEventListener focused;
 
-	private final List<LayoutElement> elements = new ArrayList<>();
+	protected final List<LayoutElement> elements = new ArrayList<>();
 	private final List<GuiEventListener> children = new ArrayList<>();
 	private final List<Renderable> renderables = new ArrayList<>();
 
 	public void add(WLayoutElementData<?> element) {
-		this.elements.add(element);
-		this.onAddElement(element.element());
+		this.addElement(element);
+		this.onAddElement(element);
 	}
 
-	private void onAddElement(LayoutElement element) {
+	protected final void addElement(LayoutElement element) {
+		this.elements.add(element);
+	}
+
+	protected final void onAddElement(LayoutElement element) {
 		if (element.getClass() == WLayoutElementData.class) {
+			WLayoutElementData<?> elementData = (WLayoutElementData<?>) element;
+			if (!elementData.onLayout()) {
+				return;
+			}
 			element = ((WLayoutElementData<?>) element).element();
 		}
 		if (element instanceof GuiEventListener guiEventListener) {
@@ -43,26 +51,25 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 		if (element instanceof Renderable renderable) {
 			this.renderables.add(renderable);
 		}
+		this.resetSize();
+	}
+
+	protected final void resetSize() {
 		this.setWidth(-1);
 		this.setHeight(-1);
 	}
 
 	public <E extends LayoutElement> WLayoutElementData<E> add(int x, int y, E element) {
 		WLayoutElementData<E> elementData = new WLayoutElementData<>(x, y, element);
-		elementData.setX(0);
-		elementData.setY(0);
-
 		this.add(elementData);
-
 		return elementData;
 	}
 
-	protected void clear() {
+	public void clear() {
 		this.elements.clear();
 		this.children.clear();
 		this.renderables.clear();
-		this.width = -1;
-		this.height = -1;
+		this.resetSize();
 	}
 
 	@Override
@@ -92,8 +99,11 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 			if (this.elements.isEmpty()) {
 				return 0;
 			}
-			var x = this.getX();
+			final var x = this.getX();
 			for (LayoutElement element : this.elements) {
+				if (element instanceof WLayoutElementData<?> elementData && !elementData.onLayout()) {
+					continue;
+				}
 				this.setWidth(Math.max(super.getWidth(), Math.max(element.getX() - x, 0) + element.getWidth()));
 			}
 		}
@@ -106,8 +116,11 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 			if (this.elements.isEmpty()) {
 				return 0;
 			}
-			var y = this.getY();
+			final var y = this.getY();
 			for (LayoutElement element : this.elements) {
+				if (element instanceof WLayoutElementData<?> elementData && !elementData.onLayout()) {
+					continue;
+				}
 				this.setHeight(Math.max(super.getHeight(), Math.max(element.getY() - y, 0) + element.getHeight()));
 			}
 		}
@@ -122,7 +135,11 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 	@Override
 	public void visitChildren(Consumer<LayoutElement> visitor) {
 		for (LayoutElement element : this.elements) {
-			if (element instanceof WLayoutElementData<?> elementData) {
+			if (element.getClass() == WLayoutElementData.class) {
+				WLayoutElementData<?> elementData = (WLayoutElementData<?>) element;
+				if (!elementData.onLayout()) {
+					continue;
+				}
 				element = elementData.element();
 			}
 			visitor.accept(element);
@@ -133,7 +150,12 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 	public void arrangeElements() {
 		this.children.clear();
 		this.renderables.clear();
+		this.resetSize();
 		super.arrangeElements();
+		repositionElements();
+	}
+
+	protected final void repositionElements() {
 		visitChildren(this::arrangeVisitor);
 	}
 

@@ -5,7 +5,14 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 
 import java.util.function.Consumer;
 
-public record WLayoutElementData<E extends LayoutElement>(int x, int y, E element) implements LayoutElement {
+public record WLayoutElementData<E extends LayoutElement>(int x, int y, E element,
+														  boolean onLayout) implements LayoutElement {
+
+	public WLayoutElementData(int x, int y, E element) {
+		this(x, y, element, true);
+		this.setX(0);
+		this.setY(0);
+	}
 
 	@Override
 	public void setX(int x) {
@@ -40,6 +47,13 @@ public record WLayoutElementData<E extends LayoutElement>(int x, int y, E elemen
 	@Override
 	public void visitWidgets(Consumer<AbstractWidget> widgetVisitor) {
 		this.element.visitWidgets(widgetVisitor);
+	}
+
+	public static LayoutElement asElement(LayoutElement element) {
+		if (element.getClass() == WLayoutElementData.class) {
+			return ((WLayoutElementData<?>) element).element;
+		}
+		return element;
 	}
 }
 
