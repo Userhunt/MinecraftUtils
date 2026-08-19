@@ -1,6 +1,6 @@
 package net.w3e.util.client.gui.option.types;
 
-import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.dialog.input.NumberRangeInput;
 import net.skds.lib2.mat.FastMath;
 import net.w3e.util.client.gui.element.WSlider;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class IntRangeOptionProviderContainer<OBJECT> extends OptionProviderContainer<RangeOption<Integer, IntRangeOptionProviderContainer.IntRangeOption>, OBJECT, Integer> {
 
-	public IntRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, Integer> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Font font) {
+	public IntRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, Integer> provider, OptionProviderContainer.ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
 		super(provider, container);
 
 		var args = this.provider.getArgs();

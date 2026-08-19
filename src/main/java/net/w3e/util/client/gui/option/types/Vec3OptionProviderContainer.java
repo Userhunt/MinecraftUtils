@@ -1,9 +1,9 @@
 package net.w3e.util.client.gui.option.types;
 
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
@@ -12,8 +12,10 @@ import net.w3e.util.common.gui.option.OptionProvider;
 
 public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, Vec3> {
 
-	public Vec3OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec3> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Font font) {
+	public Vec3OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec3> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
+
+		var font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
@@ -53,7 +55,7 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox);
 
-		this.addChild(new WLayoutProviderContainer(valueLayout, 20));
+		this.addChild(new WLayoutProviderContainer(valueLayout));
 	}
 
 }

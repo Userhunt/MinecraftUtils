@@ -1,6 +1,6 @@
 package net.w3e.util.client.gui.option.types;
 
-import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.dialog.input.NumberRangeInput;
 import net.w3e.util.client.gui.element.WSlider;
 import net.w3e.util.client.gui.option.OptionProviderContainer;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class FloatRangeOptionProviderContainer<OBJECT> extends OptionProviderContainer<RangeOption<Float, FloatRangeOptionProviderContainer.FloatRangeOption>, OBJECT, Float> {
 
-	public FloatRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, Float> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Font font) {
+	public FloatRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, Float> provider, OptionProviderContainer.ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
 		super(provider, container);
 
 		var args = this.provider.getArgs();

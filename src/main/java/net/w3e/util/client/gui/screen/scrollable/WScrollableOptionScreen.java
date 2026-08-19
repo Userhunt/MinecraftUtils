@@ -44,6 +44,7 @@ public abstract class WScrollableOptionScreen<E extends LayoutElement> extends W
 
 	protected abstract void fillBody(String query, String lowerQuery, boolean init);
 
+	@Override
 	protected final void addElement(E element) {
 		if (element instanceof Indexed indexed) {
 			indexed.setIndex(this.active.size());

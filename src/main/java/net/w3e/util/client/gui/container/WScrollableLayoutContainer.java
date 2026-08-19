@@ -16,8 +16,8 @@ public class WScrollableLayoutContainer extends WLayoutProviderContainer impleme
 	private final ScrollableLayout.ReserveStrategy reserveStrategy = ScrollableLayout.ReserveStrategy.BOTH;
 	private final Minecraft minecraft;
 
-	public WScrollableLayoutContainer(final Layout content, final int maxHeight) {
-		super(content, maxHeight);
+	public WScrollableLayoutContainer(final Layout content) {
+		super(content);
 		this.minecraft = Minecraft.getInstance();
 	}
 
@@ -41,7 +41,7 @@ public class WScrollableLayoutContainer extends WLayoutProviderContainer impleme
 			case BOTH -> 2 * this.scrollbarReserve();
 		};
 
-		this.setWidth(Math.max(contentWidth, this.getMinWidth()) + scrollbarReserve);
+		this.setWidth(Math.max(contentWidth + this.getRightPadding(), this.getMinWidth()) + scrollbarReserve);
 		this.refreshScrollAmount();
 	}
 

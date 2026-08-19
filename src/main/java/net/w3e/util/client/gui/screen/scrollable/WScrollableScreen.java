@@ -14,14 +14,9 @@ public class WScrollableScreen extends WAbstractScrollableScreen<LayoutElement> 
 	}
 
 	protected void setContents(Layout contents) {
-		this.container = new WLayoutProviderContainer(contents, this.height - 40);
+		this.container = new WLayoutProviderContainer(contents);
 	}
 
-	@Override
-	protected void repositionElements() {
-		this.container.setMaxHeight(this.height - 40);
-		super.repositionElements();
-	}
 
 	@Override
 	protected void onUpdateBody(boolean init) {

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
-import net.w3e.util.client.gui.container.WLayoutSimpleContainer;
+import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.client.minimap.MapRadiusPredicate;
 import net.w3e.util.client.minimap.MapTextureSegment;
 import net.w3e.util.client.texture.WDynamicTexture;
@@ -25,8 +25,8 @@ public class MapTestScreen extends Screen {
 		var player = this.minecraft.player;
 		assert player != null;
 
-		for (boolean ditherBlack : new boolean[]{true, false}) {
-			for (int i = 0; i <= 4; i++) {
+		for (int i = 0; i <= 4; i++) {
+			for (boolean ditherBlack : new boolean[]{true, false}) {
 				Container container = new Container(i, ditherBlack);
 
 				layout.addChild(container, ditherBlack ? 1 : 0, i);
@@ -40,13 +40,16 @@ public class MapTestScreen extends Screen {
 		layout.visitWidgets(this::addRenderableWidget);
 	}
 
-	private class Container extends WLayoutSimpleContainer {
+	private class Container extends WLayoutProviderContainer {
 
 		private static final int IMAGE_SIZE = 32;
 		private static final int OFFSET = 4;
 		private static final int RADIUS = 24;
 
 		public Container(int scale, boolean ditherBlack) {
+			GridLayout contents = new GridLayout();
+			super(contents);
+
 			//int textureSize = MapTextureSegment.getTextureSize(scale);
 			int textureSize = 16;
 
@@ -58,8 +61,10 @@ public class MapTestScreen extends Screen {
 			var world = player.level();
 			var dimension = world.dimension();
 
-			int offset = (IMAGE_SIZE + OFFSET) * textureSize / 16;
+			int offset = OFFSET * textureSize / 16;
 			offset = Math.max(OFFSET, offset);
+			contents.spacing(offset);
+			System.out.println(offset);
 
 			var playerX = player.getX();
 			var playerZ = player.getZ();
@@ -80,7 +85,7 @@ public class MapTestScreen extends Screen {
 							.build();
 
 					var image = ImageWidget.texture(textureSize, textureSize, texture.getTextureId(), textureSize, textureSize);
-					this.add((x + 1) * offset, (z + 1) * offset, image);
+					contents.addChild(image, z + 1, x + 1);
 				}
 			}
 		}

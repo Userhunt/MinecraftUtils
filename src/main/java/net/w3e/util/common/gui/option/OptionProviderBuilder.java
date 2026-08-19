@@ -4,7 +4,9 @@ import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.mat.vec3.Direction;
 import net.skds.lib2.mat.vec3.Vec3;
+import net.skds.lib2.shapes.AABB;
 import net.w3e.util.client.gui.option.RangeOption;
+import net.w3e.util.client.gui.option.types.CollectionOptionProviderContainer;
 import net.w3e.util.client.gui.option.types.FloatRangeOptionProviderContainer;
 import net.w3e.util.client.gui.option.types.IntRangeOptionProviderContainer;
 import net.w3e.util.client.gui.option.types.RotationOptionProviderContainer;
@@ -87,6 +89,10 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 		return this.addEnum(title, List.of(Direction.VALUES), getter, setter);
 	}
 
+	public BUILDER addAABB(Component title, Function<VALUE_HOLDER, AABB> getter, BiConsumer<VALUE_HOLDER, AABB> setter) {
+		return this.add(new OptionProvider<>(OptionProviderType.AABB, title, null, this.converter, getter, setter));
+	}
+
 	public <E> BUILDER addFlags(Component title, List<E> flags, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
 		return this.addFlags(title, RangeOption.ofFlags(flags), getter, setter);
 	}
@@ -94,6 +100,12 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 	public <E> BUILDER addFlags(Component title, RangeOption<E, List<E>> flags, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.getFlags(), title, flags, this.converter, getter, setter));
 	}
+
+	public <E> BUILDER addCollection(Component title, CollectionOptionProviderContainer.ListData<E, OBJECT> listData, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
+		return this.add(new OptionProvider<>(OptionProviderType.geCollection(), title, listData, this.converter, getter, setter));
+	}
+
+	// TODO typed
 
 	@SuppressWarnings("unchecked")
 	public BUILDER apply(Consumer<BUILDER> consumer) {

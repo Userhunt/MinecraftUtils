@@ -33,7 +33,7 @@ public abstract class WAbstractScrollableScreen<E extends LayoutElement> extends
 		this.body = LinearLayout.vertical().spacing(10);
 		this.body.defaultCellSetting().alignHorizontallyCenter();
 
-		this.bodyScroll = new WScrollableLayoutContainer(this.body, this.height - 40);
+		this.bodyScroll = new WScrollableLayoutContainer(this.body);
 		this.layout.addChild(this.bodyScroll, setting -> setting.alignHorizontallyCenter().alignVerticallyTop().paddingTop(35));
 
 		this.bodyScroll.visitWidgets(this::addRenderableWidget);

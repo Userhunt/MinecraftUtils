@@ -1,7 +1,6 @@
 package net.w3e.util.client.gui.option.types;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -19,8 +18,10 @@ import org.jspecify.annotations.Nullable;
 public class RotationOptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, RotationOptionProviderContainer.RotationData> {
 
 	@SuppressWarnings("unchecked")
-	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Font font) {
+	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
+
+		var font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
@@ -60,7 +61,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 			minecraft.setScreen(new EditRotationScreen());
 		}).width(100).build());
 
-		this.addChild(new WLayoutProviderContainer(valueLayout, 20));
+		this.addChild(new WLayoutProviderContainer(valueLayout));
 	}
 
 	public class EditRotationScreen extends Screen implements OptionProviderScreen<OBJECT> {

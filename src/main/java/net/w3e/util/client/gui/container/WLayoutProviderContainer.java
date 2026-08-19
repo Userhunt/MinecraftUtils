@@ -2,6 +2,8 @@ package net.w3e.util.client.gui.container;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
 import net.minecraft.client.gui.components.AbstractScrollArea;
@@ -17,6 +19,7 @@ import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.chat.CommonComponents;
 import net.w3e.util.client.gui.layout.WLayout;
+import net.w3e.util.client.gui.layout.WLayoutUtils;
 import net.w3e.util.mixins.client.AbstractWidgetAccessor;
 import org.jspecify.annotations.Nullable;
 
@@ -34,14 +37,30 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 	@Getter(AccessLevel.PROTECTED)
 	private int minHeight;
 	@Getter(AccessLevel.PROTECTED)
-	private int maxHeight;
+	private int maxHeight = Integer.MAX_VALUE;
+
+	@Getter(AccessLevel.PROTECTED)
+	@Setter
+	@Accessors(chain = true)
+	private int topPadding;
+	@Getter(AccessLevel.PROTECTED)
+	@Setter
+	@Accessors(chain = true)
+	private int bottomPadding;
+	@Getter(AccessLevel.PROTECTED)
+	@Setter
+	@Accessors(chain = true)
+	private int leftPadding;
+	@Getter(AccessLevel.PROTECTED)
+	@Setter
+	@Accessors(chain = true)
+	private int rightPadding;
 
 	private final List<AbstractWidget> children = new ArrayList<>();
 
-	public WLayoutProviderContainer(final Layout contents, final int maxHeight) {
-		super(0, 0, 0, maxHeight, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(10));
+	public WLayoutProviderContainer(final Layout contents) {
+		super(0, 0, 0, 0, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(10));
 		this.contents = contents;
-		this.maxHeight = maxHeight;
 	}
 
 	protected <T extends LayoutElement> T addChild(T element) {
@@ -54,6 +73,10 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 
 	protected <T extends LayoutElement> T addChild(T element, final LayoutSettings cellSettings) {
 		return ((LinearLayout) this.contents).addChild(element, cellSettings);
+	}
+
+	protected void clearContents() {
+		WLayoutUtils.clear((LinearLayout) this.contents);
 	}
 
 	@Override
@@ -86,7 +109,7 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 	@Override
 	public final void setX(final int x) {
 		super.setX(x);
-		this.setContentX(x);
+		this.setContentX(x + this.leftPadding);
 	}
 
 	protected void setContentX(final int x) {
@@ -96,7 +119,7 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 	@Override
 	public void setY(final int y) {
 		super.setY(y);
-		this.setContentY(y);
+		this.setContentY(y + this.topPadding);
 	}
 
 	protected void setContentY(final int y) {
@@ -109,8 +132,8 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 		this.children.clear();
 		this.contents.visitWidgets(this.children::add);
 
-		this.setWidth(Math.max(this.contents.getWidth(), this.minWidth));
-		this.setHeight(Math.clamp(this.contents.getHeight(), this.minHeight, this.maxHeight));
+		this.setWidth(Math.max(this.contents.getWidth() + this.rightPadding, this.minWidth));
+		this.setHeight(Math.clamp(this.contents.getHeight() + this.bottomPadding, this.minHeight, this.maxHeight));
 	}
 
 	@Override
@@ -125,7 +148,7 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 
 	@Override
 	protected final int contentHeight() {
-		return this.contents.getHeight();
+		return this.contents.getHeight() + this.bottomPadding;
 	}
 
 	@Override

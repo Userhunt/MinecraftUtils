@@ -1,9 +1,9 @@
 package net.w3e.util.client.gui.option.types;
 
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.quat.Quat;
 import net.w3e.util.client.gui.option.OptionProviderContainer;
@@ -16,8 +16,10 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 	private float pitch;
 	private float roll;
 
-	public QuatOptionProviderContainer(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> container, Font font) {
+	public QuatOptionProviderContainer(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
+
+		var font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
