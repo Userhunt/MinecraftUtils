@@ -2,6 +2,7 @@ package net.w3e.util.common.gui.option;
 
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.quat.Quat;
+import net.skds.lib2.mat.vec2.Vec2;
 import net.skds.lib2.mat.vec3.Direction;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.skds.lib2.shapes.AABB;
@@ -79,6 +80,10 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 
 	public BUILDER addVec3(Component title, Function<VALUE_HOLDER, Vec3> getter, BiConsumer<VALUE_HOLDER, Vec3> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.VEC3, title, null, this.converter, getter, setter));
+	}
+
+	public BUILDER addVec2(Component title, Function<VALUE_HOLDER, Vec2> getter, BiConsumer<VALUE_HOLDER, Vec2> setter) {
+		return this.add(new OptionProvider<>(OptionProviderType.VEC2, title, null, this.converter, getter, setter));
 	}
 
 	public BUILDER addRotation(Component title, Function<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> getter, BiConsumer<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> setter) {

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.Identifier;
 import net.skds.lib2.mat.quat.Quat;
+import net.skds.lib2.mat.vec2.Vec2;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.skds.lib2.shapes.AABB;
 import net.w3e.util.client.gui.option.OptionProviderContainer;
@@ -28,6 +29,13 @@ public abstract class OptionProviderType<VALUE> {
 		@Override
 		public <OBJECT> OptionProviderContainer<?, OBJECT, Vec3> createOption(OptionProvider<?, OBJECT, ?, Vec3> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
 			return new Vec3OptionProviderContainer<>(provider, container, screen);
+		}
+	};
+
+	public static final OptionProviderType<Vec2> VEC2 = new OptionProviderType<>("vec2") {
+		@Override
+		public <OBJECT> OptionProviderContainer<?, OBJECT, Vec2> createOption(OptionProvider<?, OBJECT, ?, Vec2> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
+			return new Vec2OptionProviderContainer<>(provider, container, screen);
 		}
 	};
 
