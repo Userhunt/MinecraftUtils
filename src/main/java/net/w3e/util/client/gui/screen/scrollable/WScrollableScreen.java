@@ -17,7 +17,6 @@ public class WScrollableScreen extends WAbstractScrollableScreen<LayoutElement> 
 		this.container = new WLayoutProviderContainer(contents);
 	}
 
-
 	@Override
 	protected void onUpdateBody(boolean init) {
 		this.addElement(this.container);
