@@ -7,6 +7,8 @@ import com.mojang.serialization.Dynamic;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.skds.lib2.io.codec.SosisonUtils;
@@ -17,12 +19,18 @@ import net.w3e.lib.ObjectWrapper;
 import net.w3e.util.common.io.codec.MinecraftCodecWrapper;
 import net.w3e.util.common.io.codec.MinecraftStreamCodec;
 
+import java.lang.reflect.Type;
+
 public class MinecraftCodecs {
 
 	static {
 		registerObjectConverterToSosison(String.class, Identifier.class, Identifier::parse, Identifier::toString);
 		registerObjectConverterToSosison(String.class, EntitySelector.class, e -> EntityArgument.entities().parse(new StringReader(e)), ObjectWrapper.throwUnimplementedMethodWrite());
 
+		registerObjectConverterToSosison(JsonElement.class, Component.class,
+				e -> ComponentSerialization.CODEC.parse(SosisonJsonOps.INSTANCE, e).getOrThrow(),
+				e -> ComponentSerialization.CODEC.encodeStart(SosisonJsonOps.INSTANCE, e).getOrThrow()
+		);
 		// item
 		// block
 		// command
@@ -61,6 +69,10 @@ public class MinecraftCodecs {
 
 	public static <T> void registerMinecraftCodecToSosison(Class<T> cl, Codec<T> codec) {
 		SosisonUtils.addFactory(cl, (type, registry) -> new MinecraftCodecWrapper<>(type, codec, registry));
+	}
+
+	public static <T> StreamCodec<ByteBuf, T> createStreamCodec(Type clazz) {
+		return new MinecraftStreamCodec<>(clazz);
 	}
 
 	public static <T> StreamCodec<ByteBuf, T> createStreamCodec(Class<T> clazz) {
