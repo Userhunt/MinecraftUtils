@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.skds.lib2.shapes.AABB;
+import net.w3e.util.mixins.DisplayAccessor;
 
 public class CollideVisualBox {
 
@@ -28,4 +29,9 @@ public class CollideVisualBox {
 		itemDisplay.setPos(MinecraftHelper.VEC3_VEC3.convertOR(box.getCenter()));
 	}
 
+	public static void setGlow(Display display, boolean needGlow) {
+		//display.setGlowingTag(true);
+		((DisplayAccessor) display).w3e$setUpdateRenderState(true);
+		((DisplayAccessor) display).w3e$setSharedFlag(6, needGlow);
+	}
 }

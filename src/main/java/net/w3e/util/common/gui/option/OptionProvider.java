@@ -40,7 +40,7 @@ public class OptionProvider<ARGS, OBJECT, VALUE_HOLDER, VALUE> implements Compar
 	}
 
 	@SuppressWarnings("unchecked")
-	private VALUE_HOLDER getHolder(Object object) {
+	public VALUE_HOLDER getHolder(Object object) {
 		return this.converter.apply((OBJECT) object);
 	}
 

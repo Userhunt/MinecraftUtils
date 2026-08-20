@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER>> {
 
-	protected final Function<OBJECT, VALUE_HOLDER> converter;
+	public final Function<OBJECT, VALUE_HOLDER> converter;
 
 	private final List<OptionProvider<?, OBJECT, ?, ?>> list = new ArrayList<>();
 

@@ -50,4 +50,17 @@ public abstract class DisplayMixin extends Entity implements DisplayAccessor {
 	public void w3e$setRightRotation(Quaternionfc rightRotation) {
 		this.entityData.set(DATA_RIGHT_ROTATION_ID, rightRotation);
 	}
+
+	@Shadow
+	protected boolean updateRenderState;
+
+	@Override
+	public void w3e$setUpdateRenderState(boolean updateRenderState) {
+		this.updateRenderState = updateRenderState;
+	}
+
+	@Override
+	public void w3e$setSharedFlag(int flag, boolean value) {
+		super.setSharedFlag(flag, value);
+	}
 }

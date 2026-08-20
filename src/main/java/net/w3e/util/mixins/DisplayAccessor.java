@@ -1,5 +1,6 @@
 package net.w3e.util.mixins;
 
+import net.minecraft.world.entity.Entity;
 import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.w3e.util.common.MinecraftHelper;
@@ -30,4 +31,8 @@ public interface DisplayAccessor {
 	}
 
 	void w3e$setRightRotation(Quaternionfc rightRotation);
+
+	void w3e$setUpdateRenderState(boolean updateRenderState);
+
+	void w3e$setSharedFlag(final @Entity.Flags int flag, final boolean value);
 }
