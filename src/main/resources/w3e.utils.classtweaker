@@ -1,1 +1,4 @@
 classTweaker v1 official
+
+# CreativeModeTab
+accessible class net/minecraft/world/item/CreativeModeTab$ItemDisplayBuilder
