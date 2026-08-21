@@ -6,11 +6,10 @@ import net.skds.lib2.mat.vec2.Vec2;
 import net.skds.lib2.mat.vec3.Direction;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.skds.lib2.shapes.AABB;
-import net.w3e.util.client.gui.option.RangeOption;
-import net.w3e.util.client.gui.option.types.CollectionOptionProviderContainer;
-import net.w3e.util.client.gui.option.types.FloatRangeOptionProviderContainer;
-import net.w3e.util.client.gui.option.types.IntRangeOptionProviderContainer;
-import net.w3e.util.client.gui.option.types.RotationOptionProviderContainer;
+import net.w3e.util.common.gui.option.container.FloatRangeOption;
+import net.w3e.util.common.gui.option.container.IntRangeOption;
+import net.w3e.util.common.gui.option.container.ListData;
+import net.w3e.util.common.gui.option.container.RotationData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +34,18 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 	}
 
 	public BUILDER addIntRange(Component title, int min, int max, Function<VALUE_HOLDER, Integer> getter, BiConsumer<VALUE_HOLDER, Integer> setter) {
-		return this.addIntRange(title, RangeOption.ofRange(new IntRangeOptionProviderContainer.IntRangeOption(min, max, 1)), getter, setter);
+		return this.addIntRange(title, RangeOption.ofRange(new IntRangeOption(min, max, 1)), getter, setter);
 	}
 
-	public BUILDER addIntRange(Component title, RangeOption<Integer, IntRangeOptionProviderContainer.IntRangeOption> rangeOption, Function<VALUE_HOLDER, Integer> getter, BiConsumer<VALUE_HOLDER, Integer> setter) {
+	public BUILDER addIntRange(Component title, RangeOption<Integer, IntRangeOption> rangeOption, Function<VALUE_HOLDER, Integer> getter, BiConsumer<VALUE_HOLDER, Integer> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.INT_RANGE, title, rangeOption, this.converter, getter, setter));
 	}
 
 	public BUILDER addFloatRange(Component title, float min, float max, float step, Function<VALUE_HOLDER, Float> getter, BiConsumer<VALUE_HOLDER, Float> setter) {
-		return this.addFloatRange(title, RangeOption.ofRange(new FloatRangeOptionProviderContainer.FloatRangeOption(min, max, step)), getter, setter);
+		return this.addFloatRange(title, RangeOption.ofRange(new FloatRangeOption(min, max, step)), getter, setter);
 	}
 
-	public BUILDER addFloatRange(Component title, RangeOption<Float, FloatRangeOptionProviderContainer.FloatRangeOption> rangeOption, Function<VALUE_HOLDER, Float> getter, BiConsumer<VALUE_HOLDER, Float> setter) {
+	public BUILDER addFloatRange(Component title, RangeOption<Float, FloatRangeOption> rangeOption, Function<VALUE_HOLDER, Float> getter, BiConsumer<VALUE_HOLDER, Float> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.FLOAT_RANGE, title, rangeOption, this.converter, getter, setter));
 	}
 
@@ -86,7 +85,7 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 		return this.add(new OptionProvider<>(OptionProviderType.VEC2, title, null, this.converter, getter, setter));
 	}
 
-	public BUILDER addRotation(Component title, Function<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> getter, BiConsumer<VALUE_HOLDER, RotationOptionProviderContainer.RotationData> setter) {
+	public BUILDER addRotation(Component title, Function<VALUE_HOLDER, RotationData> getter, BiConsumer<VALUE_HOLDER, RotationData> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.ROTATION, title, null, this.converter, getter, setter));
 	}
 
@@ -106,7 +105,7 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 		return this.add(new OptionProvider<>(OptionProviderType.getFlags(), title, flags, this.converter, getter, setter));
 	}
 
-	public <E> BUILDER addCollection(Component title, CollectionOptionProviderContainer.ListData<E, OBJECT> listData, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
+	public <E> BUILDER addCollection(Component title, ListData<E, OBJECT> listData, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
 		return this.add(new OptionProvider<>(OptionProviderType.geCollection(), title, listData, this.converter, getter, setter));
 	}
 

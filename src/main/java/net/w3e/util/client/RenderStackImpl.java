@@ -2,6 +2,7 @@ package net.w3e.util.client;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.ClientMannequin;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -12,20 +13,42 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.Mannequin;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.skds.lib2.mat.vec3.Vec3;
+import net.w3e.util.common.RenderStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public record RenderStack(Minecraft minecraft, LevelRenderer renderer,
-						  Camera camera,
-						  Frustum frustum,
-						  LevelRenderState output,
-						  Vec3 camPos,
-						  TickRateManager tickRateManager,
-						  boolean shouldShowEntityOutlines
-) {
+public record RenderStackImpl(Minecraft minecraft, LevelRenderer renderer,
+							  Camera camera,
+							  Frustum frustum,
+							  LevelRenderState output,
+							  Vec3 camPos,
+							  TickRateManager tickRateManager,
+							  boolean shouldShowEntityOutlines
+) implements RenderStack {
+
+	@Override
+	public Player getPlayer() {
+		assert this.minecraft.player != null;
+		return this.minecraft.player;
+	}
+
+	@Override
+	public Level getWorld() {
+		assert this.minecraft.level != null;
+		return this.minecraft.level;
+	}
+
+	@Override
+	public Mannequin createClientMannequin() {
+		//noinspection DataFlowIssue
+		return new ClientMannequin(this.getWorld(), null);
+	}
 
 	private static final List<Consumer<RenderStack>> RENDERERS = new ArrayList<>();
 

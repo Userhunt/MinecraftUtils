@@ -4,16 +4,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.server.dialog.input.NumberRangeInput;
 import net.skds.lib2.mat.FastMath;
 import net.w3e.util.client.gui.element.WSlider;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
-import net.w3e.util.client.gui.option.RangeOption;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.RangeOption;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ValueRangeOptionProviderContainer<E, OBJECT> extends OptionProviderContainer<RangeOption<E, List<E>>, OBJECT, E> {
+public class ValueRangeOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, E> {
 
-	public ValueRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, E> provider, OptionProviderContainer.ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
+	public ValueRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, E> provider, ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
 		super(provider, container);
 
 		var args = this.provider.getArgs();

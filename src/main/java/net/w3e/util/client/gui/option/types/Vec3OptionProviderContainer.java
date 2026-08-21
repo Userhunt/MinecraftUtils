@@ -7,12 +7,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
-public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, Vec3> {
+public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Vec3> {
 
-	public Vec3OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec3> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
+	public Vec3OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec3> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
 
 		var font = screen.getFont();

@@ -1,4 +1,4 @@
-package net.w3e.util.client.gui.option;
+package net.w3e.util.common.gui.option;
 
 import net.minecraft.network.chat.Component;
 

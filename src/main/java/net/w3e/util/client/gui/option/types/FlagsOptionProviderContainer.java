@@ -4,17 +4,18 @@ import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.w3e.util.client.gui.layout.WFlowLayout;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
-import net.w3e.util.client.gui.option.RangeOption;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.RangeOption;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlagsOptionProviderContainer<E, OBJECT> extends OptionProviderContainer<RangeOption<E, List<E>>, OBJECT, List<E>> {
+public class FlagsOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, List<E>> {
 
 	@SuppressWarnings("unchecked")
-	public FlagsOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
+	public FlagsOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, container);
 		this.value = new ArrayList<>(this.value);
 

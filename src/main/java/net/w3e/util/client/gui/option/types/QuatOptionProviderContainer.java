@@ -6,11 +6,12 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.quat.Quat;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.MatrixUtil;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
-public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, Quat> {
+public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Quat> {
 
 	private float yaw;
 	private float pitch;

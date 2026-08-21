@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.world.TickRateManager;
 import net.skds.lib2.mat.vec3.Vec3;
-import net.w3e.util.client.RenderStack;
+import net.w3e.util.client.RenderStackImpl;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,15 +32,15 @@ public abstract class LevelRendererMixin {
 			ordinal = 0
 	))
 	private void onRender(Camera camera, Frustum frustum, DeltaTracker deltaTracker, LevelRenderState output, CallbackInfo ci) {
-		if (this.minecraft.level == null || !RenderStack.hasRenderer()) {
+		if (this.minecraft.level == null || !RenderStackImpl.hasRenderer()) {
 			return;
 		}
 		var cameraPos = camera.position();
 		TickRateManager tickRateManager = this.minecraft.level.tickRateManager();
 		boolean shouldShowEntityOutlines = this.shouldShowEntityOutlines();
 		@SuppressWarnings("all")
-		RenderStack renderStack = new RenderStack(this.minecraft, (LevelRenderer) (Object) this, camera, frustum, output, Vec3.of(cameraPos.x(), cameraPos.y(), cameraPos.z()), tickRateManager, shouldShowEntityOutlines);
-		RenderStack.render(renderStack);
+		RenderStackImpl renderStack = new RenderStackImpl(this.minecraft, (LevelRenderer) (Object) this, camera, frustum, output, Vec3.of(cameraPos.x(), cameraPos.y(), cameraPos.z()), tickRateManager, shouldShowEntityOutlines);
+		RenderStackImpl.render(renderStack);
 	}
 
 }

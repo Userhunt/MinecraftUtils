@@ -6,10 +6,11 @@ import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.shapes.AABB;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
-public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, AABB> {
+public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, AABB> {
 
 	public AABBOptionProviderContainer(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);

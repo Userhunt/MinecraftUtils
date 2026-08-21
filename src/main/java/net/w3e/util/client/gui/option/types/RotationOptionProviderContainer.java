@@ -10,15 +10,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.w3e.util.client.MouseHelper;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.client.gui.option.OptionProviderScreen;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
+import net.w3e.util.common.gui.option.container.RotationData;
 import org.jspecify.annotations.Nullable;
 
-public class RotationOptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, RotationOptionProviderContainer.RotationData> {
+public class RotationOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, RotationData> {
 
 	@SuppressWarnings("unchecked")
-	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
+	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
 
 		var font = screen.getFont();
@@ -103,16 +105,6 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 			return RotationOptionProviderContainer.this.container.object();
 		}
 
-	}
-
-	public record RotationData(float yaw, float pitch, boolean hasPitch) {
-		public RotationData withYaw(float yaw) {
-			return new RotationData(yaw, this.pitch, this.hasPitch);
-		}
-
-		public RotationData withPitch(float pitch) {
-			return new RotationData(this.yaw, pitch, this.hasPitch);
-		}
 	}
 
 }

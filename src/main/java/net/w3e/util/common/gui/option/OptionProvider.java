@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.common.gui.option.container.ContainerPair;
+import net.w3e.util.common.gui.option.container.OptionProviderContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -63,8 +64,9 @@ public class OptionProvider<ARGS, OBJECT, VALUE_HOLDER, VALUE> implements Compar
 		return Integer.compare(this.ordinal, o.ordinal);
 	}
 
-	public OptionProviderContainer<?, OBJECT, VALUE> createOption(OptionProviderContainer.ContainerPair<OBJECT> container, Screen screen) {
-		return this.getType().createOption(this, container, screen);
+	@SuppressWarnings("unchecked")
+	public <T extends OptionProviderContainer<?, OBJECT, VALUE>> T createOption(ContainerPair<OBJECT> container, Screen screen) {
+		return (T) this.getType().createOption(this, container, screen);
 	}
 
 }

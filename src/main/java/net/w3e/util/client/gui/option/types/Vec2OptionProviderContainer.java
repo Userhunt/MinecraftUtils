@@ -7,10 +7,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.vec2.Vec2;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
-public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, Vec2> {
+public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Vec2> {
 
 	public Vec2OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);

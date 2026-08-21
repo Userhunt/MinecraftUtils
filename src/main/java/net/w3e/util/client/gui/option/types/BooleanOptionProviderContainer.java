@@ -2,10 +2,11 @@ package net.w3e.util.client.gui.option.types;
 
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
-import net.w3e.util.client.gui.option.OptionProviderContainer;
+import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.container.ContainerPair;
 
-public class BooleanOptionProviderContainer<OBJECT> extends OptionProviderContainer<Object, OBJECT, Boolean> {
+public class BooleanOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Boolean> {
 
 	public BooleanOptionProviderContainer(OptionProvider<?, OBJECT, ?, Boolean> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
