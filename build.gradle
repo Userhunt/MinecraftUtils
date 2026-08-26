@@ -15,7 +15,6 @@ rootProject.tasks.register("generateMergedClassTweaker") {
 
     println(rootProject.name)
     println(mergedFile)
-    println(sourceFiles)
 
     doLast {
         mergedFile.parentFile.mkdirs()

@@ -2,7 +2,7 @@
 	"required": true,
 	"package": "net.w3e.util.mixins.common",
 	"compatibilityLevel": "JAVA_25",
-	"mixins": ["DisplayMixin"],
+	"mixins": ["CustomDataAccessor", "DisplayMixin"],
 	"injectors": {
 		"defaultRequire": 1
 	},

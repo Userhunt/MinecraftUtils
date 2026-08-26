@@ -82,7 +82,7 @@ public class WItemDisplayWidget extends AbstractWidget {
 			matrixStack.scale(this.visualScale, this.visualScale);
 			matrixStack.translate(-posX, -posY);
 		}
-		graphics.item(this.itemStack, posX, posY, 0);
+		graphics.fakeItem(this.itemStack, posX, posY, 0);
 		if (this.decorations) {
 			graphics.itemDecorations(this.minecraft.font, this.itemStack, posX, posY, null);
 		}

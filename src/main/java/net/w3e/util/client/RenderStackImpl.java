@@ -86,7 +86,7 @@ public record RenderStackImpl(Minecraft minecraft, LevelRenderer renderer,
 					entity.zOld = entity.getZ();
 				}
 
-				EntityRenderState state = entityRenderDispatcher.extractEntity(entity, 0);
+				EntityRenderState state = entityRenderDispatcher.extractEntity(entity, 1);
 				this.output.entityRenderStates.add(state);
 				if (state.appearsGlowing() && this.shouldShowEntityOutlines) {
 					this.output.haveGlowingEntities = true;

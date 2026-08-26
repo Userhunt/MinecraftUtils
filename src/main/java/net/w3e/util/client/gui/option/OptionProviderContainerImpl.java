@@ -32,9 +32,15 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 		ContainerPair<OBJECT> container = new ContainerPair<>(new ArrayList<>(), contents, object);
 
 		for (var optionProvider : builder) {
-			LayoutElement option = (LayoutElement) optionProvider.createOption(container, screen);
+			LayoutElement option = null;
+			try {
+				option = optionProvider.createOption(container, screen);
+			} catch (Exception e) {
+				System.err.println(object + " " + optionProvider);
+				e.printStackTrace(System.err);
+			}
 			if (option == null) {
-				option = new StringWidget(optionProvider.getTitle().copy().append("(" + optionProvider.getType() + ")"), screen.getFont());
+				option = new StringWidget(optionProvider.getTitle().copy().append("(" + optionProvider.getType().getKey() + ")"), screen.getFont());
 			} else {
 				container.options().add((OptionProviderContainerImpl<?, OBJECT, ?>) option);
 			}

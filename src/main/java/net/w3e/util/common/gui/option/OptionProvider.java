@@ -40,6 +40,11 @@ public class OptionProvider<ARGS, OBJECT, VALUE_HOLDER, VALUE> implements Compar
 		this(type, 0, title, args, converter, getter, setter, Objects::equals);
 	}
 
+	public OptionProvider(OptionProviderType<VALUE> type, Component title, ARGS args, Function<OBJECT, VALUE_HOLDER> converter) {
+		this(type, title, args, converter, _ -> null, (_, _) -> {
+		});
+	}
+
 	@SuppressWarnings("unchecked")
 	public VALUE_HOLDER getHolder(Object object) {
 		return this.converter.apply((OBJECT) object);
