@@ -7,7 +7,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.shapes.AABB;
+import net.skds.lib2.shapes.OBB;
 import net.w3e.util.mixins.DisplayAccessor;
 
 public class CollideVisualBox {
@@ -29,9 +31,28 @@ public class CollideVisualBox {
 		itemDisplay.setPos(MinecraftHelper.VEC3_VEC3.convertOR(box.getCenter()));
 	}
 
+	public static Display.ItemDisplay createOBB(Level world, OBB box) {
+		Display.ItemDisplay itemDisplay = new Display.ItemDisplay(EntityType.ITEM_DISPLAY, world);
+		itemDisplay.setItemStack(new ItemStack(Items.TINTED_GLASS));
+		setOBB(itemDisplay, box);
+		return itemDisplay;
+	}
+
+	public static void setOBB(Display.ItemDisplay itemDisplay, OBB box) {
+		float length = box.dimensions.lengthF();
+		itemDisplay.setWidth(length);
+		itemDisplay.setHeight(length);
+		itemDisplay.setTransformation(new Transformation(
+				null, MinecraftHelper.QUAT_QUATERNIONF.convertOR(Quat.fromMatrix(box.normals)), MinecraftHelper.VEC3_VECTOR3F.convertOR(box.dimensions), null
+		));
+		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
+		itemDisplay.setPos(MinecraftHelper.VEC3_VEC3.convertOR(box.getCenter()));
+	}
+
 	public static void setGlow(Display display, boolean needGlow) {
 		//display.setGlowingTag(true);
 		((DisplayAccessor) display).w3e$setUpdateRenderState(true);
 		((DisplayAccessor) display).w3e$setSharedFlag(6, needGlow);
 	}
+
 }

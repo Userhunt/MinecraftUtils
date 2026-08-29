@@ -25,10 +25,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(new StringWidget(Component.literal("Min"), font), 0, 0);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.minX));
+		editBox.setValue(String.valueOf(round(this.value.minX)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(value, this.value.minY, this.value.minZ, this.value.maxX, this.value.maxY, this.value.maxZ);
 			} catch (Exception _) {
 			}
@@ -36,10 +36,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox, 0, 1);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.minY));
+		editBox.setValue(String.valueOf(round(this.value.minY)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(this.value.minX, value, this.value.minZ, this.value.maxX, this.value.maxY, this.value.maxZ);
 			} catch (Exception _) {
 			}
@@ -47,10 +47,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox, 0, 2);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.minZ));
+		editBox.setValue(String.valueOf(round(this.value.minZ)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(this.value.minX, this.value.minY, value, this.value.maxX, this.value.maxY, this.value.maxZ);
 			} catch (Exception _) {
 			}
@@ -60,10 +60,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(new StringWidget(Component.literal("Max"), font), 1, 0);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.maxX));
+		editBox.setValue(String.valueOf(round(this.value.maxX)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(this.value.minX, this.value.minY, this.value.minZ, value, this.value.maxY, this.value.maxZ);
 			} catch (Exception _) {
 			}
@@ -71,10 +71,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox, 1, 1);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.maxY));
+		editBox.setValue(String.valueOf(round(this.value.maxY)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(this.value.minX, this.value.minY, this.value.minZ, this.value.maxX, value, this.value.maxZ);
 			} catch (Exception _) {
 			}
@@ -82,10 +82,10 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox, 1, 2);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.maxZ));
+		editBox.setValue(String.valueOf(round(this.value.maxZ)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = AABB.fromToNormalized(this.value.minX, this.value.minY, this.value.minZ, this.value.maxX, this.value.maxY, value);
 			} catch (Exception _) {
 			}

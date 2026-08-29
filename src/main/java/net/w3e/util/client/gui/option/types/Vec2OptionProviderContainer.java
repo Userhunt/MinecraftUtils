@@ -24,10 +24,10 @@ public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		EditBox editBox;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.x()));
+		editBox.setValue(String.valueOf(round(this.value.x())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = Vec2.of(value, this.value.y());
 			} catch (Exception _) {
 			}
@@ -35,10 +35,10 @@ public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.y()));
+		editBox.setValue(String.valueOf(round(this.value.y())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = Vec2.of(this.value.x(), value);
 			} catch (Exception _) {
 			}

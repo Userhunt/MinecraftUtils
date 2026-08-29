@@ -20,7 +20,7 @@ public class FloatRangeOptionProviderContainer<OBJECT> extends OptionProviderCon
 		var range = args.value();
 		NumberRangeInput.RangeInfo rangeInfo = new NumberRangeInput.RangeInfo(range.min(), range.max(), Optional.of(this.value), Optional.of(range.step()));
 		var slider = new WSlider(0, 0, 120, 20,
-				e -> args.textGetter().apply(this.provider.getTitle().copy(), e), rangeInfo, e -> this.value = e
+				e -> args.textGetter().apply(this.provider.getTitle().copy(), round(e)), rangeInfo, e -> this.value = round(e)
 		);
 		this.addChild(slider);
 	}

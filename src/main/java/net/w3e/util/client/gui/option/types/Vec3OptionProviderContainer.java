@@ -24,10 +24,10 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		EditBox editBox;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.x()));
+		editBox.setValue(String.valueOf(round(this.value.x())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = Vec3.of(value, this.value.y(), this.value.z());
 			} catch (Exception _) {
 			}
@@ -35,10 +35,10 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.y()));
+		editBox.setValue(String.valueOf(round(this.value.y())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = Vec3.of(this.value.x(), value, this.value.z());
 			} catch (Exception _) {
 			}
@@ -46,10 +46,10 @@ public class Vec3OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.z()));
+		editBox.setValue(String.valueOf(round(this.value.z())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = Vec3.of(this.value.x(), this.value.y(), value);
 			} catch (Exception _) {
 			}

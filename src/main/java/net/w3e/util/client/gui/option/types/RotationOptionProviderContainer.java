@@ -31,10 +31,10 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 		EditBox editBox;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.value.yaw()));
+		editBox.setValue(String.valueOf(round(this.value.yaw())));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				this.value = this.value.withYaw(value);
 			} catch (Exception _) {
 			}
@@ -43,10 +43,10 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 
 		if (this.value.hasPitch()) {
 			editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-			editBox.setValue(String.valueOf(this.value.pitch()));
+			editBox.setValue(String.valueOf(round(this.value.pitch())));
 			editBox.setResponder(v -> {
 				try {
-					float value = Float.parseFloat(v);
+					float value = round(Float.parseFloat(v));
 					this.value = this.value.withPitch(value);
 				} catch (Exception _) {
 				}

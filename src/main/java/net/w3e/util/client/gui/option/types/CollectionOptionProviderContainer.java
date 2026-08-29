@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
+import net.w3e.util.common.gui.option.OptionProviderUpdateData;
 import net.w3e.util.common.gui.option.container.ContainerPair;
 import net.w3e.util.common.gui.option.container.ListData;
 import net.w3e.util.mixins.client.ScreenAccessor;
@@ -46,12 +47,12 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	}
 
 	@Override
-	public boolean equals() {
+	public OptionProviderUpdateData<OBJECT, List<E>> createUpdateData() {
 		this.value.clear();
 		for (ElementContainer container : this.containers) {
 			this.value.add(container.container.getValue());
 		}
-		return super.equals();
+		return super.createUpdateData();
 	}
 
 	private void add() {

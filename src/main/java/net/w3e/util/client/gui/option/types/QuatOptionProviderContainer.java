@@ -33,10 +33,10 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		this.roll = angles.roundZ() / 100f;
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.yaw));
+		editBox.setValue(String.valueOf(round(this.yaw)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				if (this.yaw != value) {
 					this.yaw = value;
 					this.value = MatrixUtil.getQuat(this.yaw, this.pitch, this.roll);
@@ -47,10 +47,10 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.pitch));
+		editBox.setValue(String.valueOf(round(this.pitch)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				if (this.pitch != value) {
 					this.pitch = value;
 					this.value = MatrixUtil.getQuat(this.yaw, this.pitch, this.roll);
@@ -61,10 +61,10 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		valueLayout.addChild(editBox);
 
 		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
-		editBox.setValue(String.valueOf(this.roll));
+		editBox.setValue(String.valueOf(round(this.roll)));
 		editBox.setResponder(v -> {
 			try {
-				float value = Float.parseFloat(v);
+				float value = round(Float.parseFloat(v));
 				if (this.roll != value) {
 					this.roll = value;
 					this.value = MatrixUtil.getQuat(this.yaw, this.pitch, this.roll);
