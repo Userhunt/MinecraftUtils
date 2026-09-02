@@ -14,7 +14,7 @@ public class MatrixUtil {
 	public static Vec3 getYPR(Quat quat) {
 		Vector3f anglesRadians = new Vector3f();
 
-		MinecraftHelper.QUAT_QUATERNIONF.convertOR(quat).getEulerAnglesYXZ(anglesRadians);
+		MinecraftHelper.QUAT.convertOR(quat).getEulerAnglesYXZ(anglesRadians);
 
 		var yaw = FastMath.round(-anglesRadians.y * FastMath.RAD_2_DGR * 100) / 100f;
 		var pitch = FastMath.round(anglesRadians.x * FastMath.RAD_2_DGR * 100) / 100f;

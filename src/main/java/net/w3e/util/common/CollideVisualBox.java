@@ -25,10 +25,10 @@ public class CollideVisualBox {
 		itemDisplay.setWidth((float) box.getMaxWidth());
 		itemDisplay.setHeight((float) box.sizeY());
 		itemDisplay.setTransformation(new Transformation(
-				null, null, MinecraftHelper.VEC3_VECTOR3F.convertOR(box.dimensions()), null
+				null, null, MinecraftHelper.VEC3F.convertOR(box.dimensions()), null
 		));
 		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
-		itemDisplay.setPos(MinecraftHelper.VEC3_VEC3.convertOR(box.getCenter()));
+		itemDisplay.setPos(MinecraftHelper.VEC3.convertOR(box.getCenter()));
 	}
 
 	public static Display.ItemDisplay createOBB(Level world, OBB box) {
@@ -43,10 +43,10 @@ public class CollideVisualBox {
 		itemDisplay.setWidth(length);
 		itemDisplay.setHeight(length);
 		itemDisplay.setTransformation(new Transformation(
-				null, MinecraftHelper.QUAT_QUATERNIONF.convertOR(Quat.fromMatrix(box.normals)), MinecraftHelper.VEC3_VECTOR3F.convertOR(box.dimensions), null
+				null, MinecraftHelper.QUAT.convertOR(Quat.fromMatrix(box.normals)), MinecraftHelper.VEC3F.convertOR(box.dimensions), null
 		));
 		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
-		itemDisplay.setPos(MinecraftHelper.VEC3_VEC3.convertOR(box.getCenter()));
+		itemDisplay.setPos(MinecraftHelper.VEC3.convertOR(box.getCenter()));
 	}
 
 	public static void setGlow(Display display, boolean needGlow) {
