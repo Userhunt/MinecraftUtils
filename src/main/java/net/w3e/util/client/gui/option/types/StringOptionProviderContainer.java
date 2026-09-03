@@ -17,7 +17,7 @@ public class StringOptionProviderContainer<OBJECT> extends OptionProviderContain
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
-		EditBox editBox = new EditBox(font, 0, 0, 190, 20, Component.empty());
+		EditBox editBox = new EditBox(font, 0, 0, WIDTH, 20, Component.empty());
 		editBox.setValue(this.value);
 		editBox.setResponder(v -> this.value = v);
 		this.addChild(editBox);

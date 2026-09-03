@@ -49,6 +49,11 @@ public class WFlowLayout extends WLayoutSimpleContainer {
 
 		this.clear();
 
+		final int layoutX = this.getX();
+		final int layoutY = this.getY();
+		this.setX(0);
+		this.setY(0);
+
 		int currentX = 0;
 		int currentY = 0;
 
@@ -65,8 +70,8 @@ public class WFlowLayout extends WLayoutSimpleContainer {
 					currentX += w + this.horizontalSpacing;
 					continue;
 				}
-				this.setHeight(-1);
 				currentX = 0;
+				this.setHeight(-1);
 				currentY = this.getHeight() + this.verticalSpacing;
 				if (currentX + w < this.maxWidth) {
 					this.addElement(new WLayoutElementData<>(currentX, currentY, layoutElement));
@@ -80,8 +85,8 @@ public class WFlowLayout extends WLayoutSimpleContainer {
 		}
 
 		this.resetSize();
-		setX(this.getX());
-		setY(this.getY());
+		setX(layoutX);
+		setY(layoutY);
 
 		super.repositionElements();
 	}

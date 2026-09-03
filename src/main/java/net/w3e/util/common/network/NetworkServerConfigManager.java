@@ -23,6 +23,10 @@ public class NetworkServerConfigManager {
 		MANAGERS.add(Objects.requireNonNull(object));
 	}
 
+	public static void reload(MinecraftServer server) {
+		reload(server, null, true);
+	}
+
 	public static void onInitialize() {
 		ServerLifecycleEvents.SERVER_STARTED.register(NetworkServerConfigManager::load);
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(NetworkServerConfigManager::reload);

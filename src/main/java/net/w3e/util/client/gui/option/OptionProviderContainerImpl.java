@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer<ARGS, OBJECT, VALUE> {
+public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer<OBJECT, VALUE> {
 
 	public static <OBJECT> ContainerPair<OBJECT> create(Component title, Screen screen, OBJECT object, OptionProviderBuilder<OBJECT, ?, ?> builder) {
 		return create(title, screen, object, builder.build());

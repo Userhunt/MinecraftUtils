@@ -104,7 +104,10 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 				if (element instanceof WLayoutElementData<?> elementData && !elementData.onLayout()) {
 					continue;
 				}
-				this.setWidth(Math.max(super.getWidth(), Math.max(element.getX() - x, 0) + element.getWidth()));
+				var e = Math.max(element.getX() - x, 0);
+				var v = element.getWidth();
+				var old = super.getWidth();
+				this.setWidth(Math.max(old, e + v));
 			}
 		}
 		return super.getWidth();
@@ -121,7 +124,10 @@ public class WLayoutSimpleContainer extends WAbstractLayout {
 				if (element instanceof WLayoutElementData<?> elementData && !elementData.onLayout()) {
 					continue;
 				}
-				this.setHeight(Math.max(super.getHeight(), Math.max(element.getY() - y, 0) + element.getHeight()));
+				var e = Math.max(element.getY() - y, 0);
+				var v = element.getHeight();
+				var old = super.getHeight();
+				this.setHeight(Math.max(old, e + v));
 			}
 		}
 		return super.getHeight();
