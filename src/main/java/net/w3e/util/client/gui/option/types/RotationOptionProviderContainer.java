@@ -19,6 +19,9 @@ import org.jspecify.annotations.Nullable;
 
 public class RotationOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, RotationData> {
 
+	private final EditBox yawBox;
+	private final EditBox pitchBox;
+
 	@SuppressWarnings("unchecked")
 	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super(provider, container);
@@ -39,6 +42,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 			} catch (Exception _) {
 			}
 		});
+		this.yawBox = editBox;
 		valueLayout.addChild(editBox);
 
 		if (this.value.hasPitch()) {
@@ -51,7 +55,10 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 				} catch (Exception _) {
 				}
 			});
+			this.pitchBox = editBox;
 			valueLayout.addChild(editBox);
+		} else {
+			this.pitchBox = null;
 		}
 
 		valueLayout.addChild(Button.builder(Component.literal("Настроить"), _ -> {
@@ -96,8 +103,13 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 		public void onClose() {
 			var player = this.minecraft.player;
 			assert player != null;
-			RotationOptionProviderContainer.this.value = new RotationData(player.getYRot(), player.getXRot(), RotationOptionProviderContainer.this.value.hasPitch());
+			var gui = RotationOptionProviderContainer.this;
+			gui.value = new RotationData(player.getYRot(), player.getXRot(), gui.value.hasPitch());
 			this.minecraft.setScreen(this.screen);
+			gui.yawBox.setValue(String.valueOf(round(player.getYRot())));
+			if (gui.pitchBox != null) {
+				gui.pitchBox.setValue(String.valueOf(round(player.getXRot())));
+			}
 		}
 
 		@Override
