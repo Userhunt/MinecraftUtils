@@ -28,7 +28,11 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	public CollectionOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> container, Screen screen) {
 		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, container);
 
-		this.value = new ArrayList<>(this.value);
+		if (this.value == null) {
+			this.value = new ArrayList<>();
+		} else {
+			this.value = new ArrayList<>(this.value);
+		}
 
 		this.screen = screen;
 
