@@ -10,13 +10,21 @@ import net.minecraft.world.level.Level;
 import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.shapes.AABB;
 import net.skds.lib2.shapes.OBB;
+import net.skds.lib2.shapes.Shape;
 import net.w3e.util.mixins.DisplayAccessor;
 
 public class CollideVisualBox {
 
-	public static Display.ItemDisplay createAABB(Level world, AABB box) {
+	private static Display.ItemDisplay createDisplay(Level world, Shape shape) {
 		Display.ItemDisplay itemDisplay = new Display.ItemDisplay(EntityType.ITEM_DISPLAY, world);
 		itemDisplay.setItemStack(new ItemStack(Items.TINTED_GLASS));
+		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
+		itemDisplay.setViewRange(shape.getBoundingBox().dimensions().lengthF());
+		return itemDisplay;
+	}
+
+	public static Display.ItemDisplay createAABB(Level world, AABB box) {
+		Display.ItemDisplay itemDisplay = createDisplay(world, box);
 		setAABB(itemDisplay, box);
 		return itemDisplay;
 	}
@@ -27,13 +35,11 @@ public class CollideVisualBox {
 		itemDisplay.setTransformation(new Transformation(
 				null, null, MinecraftHelper.VEC3F.convertOR(box.dimensions()), null
 		));
-		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
 		itemDisplay.setPos(MinecraftHelper.VEC3.convertOR(box.getCenter()));
 	}
 
 	public static Display.ItemDisplay createOBB(Level world, OBB box) {
-		Display.ItemDisplay itemDisplay = new Display.ItemDisplay(EntityType.ITEM_DISPLAY, world);
-		itemDisplay.setItemStack(new ItemStack(Items.TINTED_GLASS));
+		Display.ItemDisplay itemDisplay = createDisplay(world, box);
 		setOBB(itemDisplay, box);
 		return itemDisplay;
 	}
@@ -45,7 +51,6 @@ public class CollideVisualBox {
 		itemDisplay.setTransformation(new Transformation(
 				null, MinecraftHelper.QUAT.convertOR(Quat.fromMatrix(box.normals)), MinecraftHelper.VEC3F.convertOR(box.dimensions), null
 		));
-		itemDisplay.setBrightnessOverride(Brightness.FULL_BRIGHT);
 		itemDisplay.setPos(MinecraftHelper.VEC3.convertOR(box.getCenter()));
 	}
 
