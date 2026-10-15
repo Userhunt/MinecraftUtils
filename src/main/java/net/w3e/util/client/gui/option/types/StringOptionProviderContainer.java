@@ -10,14 +10,14 @@ import net.w3e.util.common.gui.option.container.ContainerPair;
 
 public class StringOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, String> {
 
-	public StringOptionProviderContainer(OptionProvider<?, OBJECT, ?, String> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public StringOptionProviderContainer(OptionProvider<?, OBJECT, ?, String> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		var font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
-		EditBox editBox = new EditBox(font, 0, 0, WIDTH, 20, Component.empty());
+		EditBox editBox = new EditBox(font, 0, 0, getTabbedWidth(), 20, Component.empty());
 		editBox.setValue(this.value);
 		editBox.setResponder(v -> this.value = v);
 		this.addChild(editBox);

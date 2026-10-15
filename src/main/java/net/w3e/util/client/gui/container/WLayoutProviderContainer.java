@@ -90,19 +90,28 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 		super.setFocused(focused);
 	}
 
+	protected final void updateWidth() {
+		this.setWidth(Math.max(this.leftPadding + this.contents.getWidth() + this.rightPadding, this.minWidth));
+	}
+
+	protected final void updateHeight() {
+		this.setHeight(Math.clamp(this.bottomPadding + this.contents.getHeight() + this.topPadding, this.minHeight, this.maxHeight));
+	}
+
 	public final void setMinWidth(final int minWidth) {
 		this.minWidth = minWidth;
-		this.setWidth(Math.max(this.contents.getWidth(), minWidth));
+		this.updateWidth();
 	}
 
 	public final void setMinHeight(final int minHeight) {
 		this.minHeight = minHeight;
+		this.updateHeight();
 		this.setHeight(Math.max(this.contents.getHeight(), minHeight));
 	}
 
 	public final void setMaxHeight(final int maxHeight) {
 		this.maxHeight = maxHeight;
-		this.setHeight(Math.min(this.contents.getHeight(), maxHeight));
+		this.updateHeight();
 		this.refreshScrollAmount();
 	}
 
@@ -132,8 +141,8 @@ public class WLayoutProviderContainer extends AbstractContainerWidget implements
 		this.children.clear();
 		this.contents.visitWidgets(this.children::add);
 
-		this.setWidth(Math.max(this.contents.getWidth() + this.rightPadding, this.minWidth));
-		this.setHeight(Math.clamp(this.contents.getHeight() + this.bottomPadding, this.minHeight, this.maxHeight));
+		this.updateWidth();
+		this.updateHeight();
 	}
 
 	@Override

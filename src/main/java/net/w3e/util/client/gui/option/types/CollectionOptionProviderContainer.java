@@ -25,8 +25,8 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	private final List<ElementContainer> containers = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
-	public CollectionOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, container);
+	public CollectionOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, containerPair);
 
 		if (this.value == null) {
 			this.value = new ArrayList<>();
@@ -51,7 +51,7 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	}
 
 	@Override
-	public OptionProviderUpdateData<OBJECT, List<E>> createUpdateData() {
+	public List<OptionProviderUpdateData<OBJECT, ?>> createUpdateData() {
 		this.value.clear();
 		for (ElementContainer container : this.containers) {
 			this.value.add(container.container.getValue());
@@ -61,7 +61,7 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 
 	private void add() {
 		var args = this.provider.getArgs();
-		E newValue = args.factory().apply(this.container.object());
+		E newValue = args.factory().apply(this.containerPair.object());
 		this.containers.add(new ElementContainer(newValue, args));
 		init(true);
 	}
@@ -85,13 +85,17 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 		public ElementContainer(E value, ListData<E, OBJECT> args) {
 			super(LinearLayout.vertical().spacing(5));
 
-			this.container = args.provider().crateProvider(Function.identity(), (_) -> value, null).createOption(CollectionOptionProviderContainer.this.container, CollectionOptionProviderContainer.this.screen);
+			var containerPair = CollectionOptionProviderContainer.this.containerPair.newTab();
+
+			this.container = args.provider().crateProvider(Function.identity(), (_) -> value, null).createOption(CollectionOptionProviderContainer.this.containerPair.newTab(), CollectionOptionProviderContainer.this.screen);
 			this.addChild(this.container);
+
+			int tab = containerPair.getTab();
 
 			this.addChild(Button.builder(Component.literal("Удалить элемент"), _ -> {
 				CollectionOptionProviderContainer.this.containers.remove(this);
 				init(true);
-			}).build());
+			}).width(getTabbedWidth(tab, 1, BUTTON_WIDTH)).build(), e -> e.paddingLeft(tab));
 		}
 
 	}

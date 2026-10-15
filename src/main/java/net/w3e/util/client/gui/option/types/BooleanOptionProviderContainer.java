@@ -8,12 +8,13 @@ import net.w3e.util.common.gui.option.container.ContainerPair;
 
 public class BooleanOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Boolean> {
 
-	public BooleanOptionProviderContainer(OptionProvider<?, OBJECT, ?, Boolean> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public BooleanOptionProviderContainer(OptionProvider<?, OBJECT, ?, Boolean> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		this.addChild(Checkbox.builder(provider.getTitle(), screen.getFont())
 				.selected(this.value)
 				.onValueChange((_, value) -> this.value = value)
+				.maxWidth(getTabbedWidth())
 				.build()
 		);
 	}

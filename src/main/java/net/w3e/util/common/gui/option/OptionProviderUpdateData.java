@@ -4,18 +4,30 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
-public class OptionProviderUpdateData<OBJECT, V> implements Comparable<OptionProviderUpdateData<?, ?>> {
+public abstract class OptionProviderUpdateData<OBJECT, V> implements Comparable<OptionProviderUpdateData<?, ?>> {
 
-	private final OptionProvider<?, OBJECT, ?, V> provider;
-	private final V value;
+	protected final OptionProvider<?, OBJECT, ?, V> provider;
 
 	@Override
 	public int compareTo(@NotNull OptionProviderUpdateData<?, ?> o) {
 		return this.provider.compareTo(o.provider);
 	}
 
-	public void apply(OBJECT object) {
-		this.provider.setValue(object, this.value);
+	public abstract void apply(OBJECT object);
+
+	public static class Single<OBJECT, V> extends OptionProviderUpdateData<OBJECT, V> {
+
+		private final V value;
+
+		public Single(OptionProvider<?, OBJECT, ?, V> provider, V value) {
+			super(provider);
+			this.value = value;
+		}
+
+		@Override
+		public void apply(OBJECT object) {
+			this.provider.setValue(object, this.value);
+		}
 	}
 
 }

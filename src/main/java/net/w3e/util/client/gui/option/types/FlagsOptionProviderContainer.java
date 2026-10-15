@@ -15,8 +15,8 @@ import java.util.List;
 public class FlagsOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, List<E>> {
 
 	@SuppressWarnings("unchecked")
-	public FlagsOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, container);
+	public FlagsOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, containerPair);
 		this.value = new ArrayList<>(this.value);
 
 		var font = screen.getFont();
@@ -26,7 +26,8 @@ public class FlagsOptionProviderContainer<E, OBJECT> extends OptionProviderConta
 		var args = this.provider.getArgs();
 
 		WFlowLayout layout = new WFlowLayout();
-		for (E arg : args.value()) {
+		layout.setMaxWidth(getTabbedWidth(WIDTH));
+		for (E arg : args.range()) {
 			layout.add(Checkbox.builder(args.textGetter().apply(provider.getTitle(), arg), font)
 					.selected(this.value.contains(arg))
 					.onValueChange((_, value) -> {

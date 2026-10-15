@@ -12,8 +12,8 @@ import net.w3e.util.common.gui.option.container.ContainerPair;
 
 public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, AABB> {
 
-	public AABBOptionProviderContainer(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public AABBOptionProviderContainer(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		var font = screen.getFont();
 
@@ -22,9 +22,12 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		GridLayout valueLayout = new GridLayout().spacing(10);
 		EditBox editBox;
 
-		valueLayout.addChild(new StringWidget(Component.literal("Min"), font), 0, 0);
+		final var widgetMin = new StringWidget(Component.literal("Min"), font);
+		final var widgetMax = new StringWidget(Component.literal("Max"), font);
+		valueLayout.addChild(widgetMin, 0, 0);
+		final int width = getTabbedWidth(Math.max(widgetMin.getWidth(), widgetMax.getWidth()), 3, NUMBER_WIDTH);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.minX)));
 		editBox.setResponder(v -> {
 			try {
@@ -35,7 +38,7 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox, 0, 1);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.minY)));
 		editBox.setResponder(v -> {
 			try {
@@ -46,7 +49,7 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox, 0, 2);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.minZ)));
 		editBox.setResponder(v -> {
 			try {
@@ -57,9 +60,9 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox, 0, 3);
 
-		valueLayout.addChild(new StringWidget(Component.literal("Max"), font), 1, 0);
+		valueLayout.addChild(widgetMax, 1, 0);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.maxX)));
 		editBox.setResponder(v -> {
 			try {
@@ -70,7 +73,7 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox, 1, 1);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.maxY)));
 		editBox.setResponder(v -> {
 			try {
@@ -81,7 +84,7 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox, 1, 2);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.maxZ)));
 		editBox.setResponder(v -> {
 			try {

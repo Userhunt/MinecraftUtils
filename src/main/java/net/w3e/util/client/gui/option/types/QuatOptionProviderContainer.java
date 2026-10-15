@@ -17,8 +17,8 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 	private float pitch;
 	private float roll;
 
-	public QuatOptionProviderContainer(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public QuatOptionProviderContainer(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		var font = screen.getFont();
 
@@ -32,7 +32,9 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		this.pitch = angles.roundY() / 100f;
 		this.roll = angles.roundZ() / 100f;
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		int width = getTabbedWidth(3, BUTTON_WIDTH);
+
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.yaw)));
 		editBox.setResponder(v -> {
 			try {
@@ -46,7 +48,7 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.pitch)));
 		editBox.setResponder(v -> {
 			try {
@@ -60,7 +62,7 @@ public class QuatOptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.roll)));
 		editBox.setResponder(v -> {
 			try {

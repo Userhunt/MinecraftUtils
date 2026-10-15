@@ -25,26 +25,33 @@ public abstract class OptionProviderType<VALUE> {
 		this(Identifier.parse(value));
 	}
 
-	public abstract <OBJECT> OptionProviderContainer<OBJECT, VALUE> createOption(OptionProvider<?, OBJECT, ?, VALUE> provider, ContainerPair<OBJECT> container, Screen screen);
+	public abstract <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, VALUE> provider, ContainerPair<OBJECT> containerPair, Screen screen);
 
 	public static final OptionProviderType<Vec3> VEC3 = new OptionProviderType<>("vec3") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Vec3> createOption(OptionProvider<?, OBJECT, ?, Vec3> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new Vec3OptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Vec3> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new Vec3OptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<Vec2> VEC2 = new OptionProviderType<>("vec2") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Vec2> createOption(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new Vec2OptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new Vec2OptionProviderContainer<>(provider, containerPair, screen);
+		}
+	};
+
+	public static final OptionProviderType<AABB> AABB = new OptionProviderType<>("aabb") {
+		@Override
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new AABBOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<?> ENUM = new OptionProviderType<>("enum") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Object> createOption(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new EnumOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new EnumOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
@@ -55,22 +62,22 @@ public abstract class OptionProviderType<VALUE> {
 
 	public static final OptionProviderType<Integer> INT_RANGE = new OptionProviderType<>("int_range") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Integer> createOption(OptionProvider<?, OBJECT, ?, Integer> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new IntRangeOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Integer> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new IntRangeOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<Float> FLOAT_RANGE = new OptionProviderType<>("float_range") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Float> createOption(OptionProvider<?, OBJECT, ?, Float> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new FloatRangeOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Float> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new FloatRangeOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<?> VALUE_RANGE = new OptionProviderType<>("value_range") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Object> createOption(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new ValueRangeOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new ValueRangeOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
@@ -81,37 +88,36 @@ public abstract class OptionProviderType<VALUE> {
 
 	public static final OptionProviderType<RotationData> ROTATION = new OptionProviderType<>("rotation") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, RotationData> createOption(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new RotationOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new RotationOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<String> STRING = new OptionProviderType<>("string") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, String> createOption(OptionProvider<?, OBJECT, ?, String> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new StringOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, String> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new StringOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<Quat> QUAT = new OptionProviderType<>("quat") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Quat> createOption(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new QuatOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Quat> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new QuatOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<Boolean> BOOLEAN = new OptionProviderType<>("boolean") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, Boolean> createOption(OptionProvider<?, OBJECT, ?, Boolean> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new BooleanOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Boolean> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new BooleanOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	public static final OptionProviderType<List<?>> FLAGS = new OptionProviderType<>("flags") {
-		@SuppressWarnings("unchecked")
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, List<?>> createOption(OptionProvider<?, OBJECT, ?, List<?>> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return (OptionProviderContainer<OBJECT, List<?>>) (OptionProviderContainer<?, ?>) new FlagsOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, List<?>> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new FlagsOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
@@ -121,22 +127,27 @@ public abstract class OptionProviderType<VALUE> {
 	}
 
 	public static final OptionProviderType<List<?>> COLLECTION = new OptionProviderType<>("collection") {
-		@SuppressWarnings("unchecked")
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, List<?>> createOption(OptionProvider<?, OBJECT, ?, List<?>> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return (OptionProviderContainer<OBJECT, List<?>>) (OptionProviderContainer<?, ?>) new CollectionOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, List<?>> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new CollectionOptionProviderContainer<>(provider, containerPair, screen);
 		}
 	};
 
 	@SuppressWarnings("unchecked")
-	public static <E> OptionProviderType<List<E>> geCollection() {
+	public static <E> OptionProviderType<List<E>> getCollection() {
 		return (OptionProviderType<List<E>>) (OptionProviderType<?>) COLLECTION;
 	}
 
-	public static final OptionProviderType<AABB> AABB = new OptionProviderType<>("aabb") {
+	public static final OptionProviderType<?> ENUM_PAGE = new OptionProviderType<>("enum_container") {
 		@Override
-		public <OBJECT> OptionProviderContainer<OBJECT, AABB> createOption(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> container, Screen screen) {
-			return new AABBOptionProviderContainer<>(provider, container, screen);
+		public <OBJECT> OptionProviderContainer<OBJECT> createOption(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+			return new EnumPageProviderContainer<>(provider, containerPair, screen);
 		}
 	};
+
+	@SuppressWarnings("unchecked")
+	public static <E> OptionProviderType<E> getEnumPage() {
+		return (OptionProviderType<E>) ENUM_PAGE;
+	}
+
 }

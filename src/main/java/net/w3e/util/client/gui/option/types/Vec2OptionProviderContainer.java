@@ -13,8 +13,8 @@ import net.w3e.util.common.gui.option.container.ContainerPair;
 
 public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainerImpl<Object, OBJECT, Vec2> {
 
-	public Vec2OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public Vec2OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		var font = screen.getFont();
 
@@ -23,7 +23,9 @@ public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		LinearLayout valueLayout = LinearLayout.horizontal().spacing(5);
 		EditBox editBox;
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		int width = getTabbedWidth(2, NUMBER_WIDTH);
+
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.x())));
 		editBox.setResponder(v -> {
 			try {
@@ -34,7 +36,7 @@ public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer
 		});
 		valueLayout.addChild(editBox);
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.y())));
 		editBox.setResponder(v -> {
 			try {

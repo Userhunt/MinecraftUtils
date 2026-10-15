@@ -1,30 +1,31 @@
 package net.w3e.util.common.gui.option;
 
+import lombok.RequiredArgsConstructor;
 import net.minecraft.network.chat.Component;
 import net.skds.lib2.mat.quat.Quat;
 import net.skds.lib2.mat.vec2.Vec2;
 import net.skds.lib2.mat.vec3.Direction;
 import net.skds.lib2.mat.vec3.Vec3;
 import net.skds.lib2.shapes.AABB;
-import net.w3e.util.common.gui.option.container.FloatRangeOption;
-import net.w3e.util.common.gui.option.container.IntRangeOption;
-import net.w3e.util.common.gui.option.container.ListData;
-import net.w3e.util.common.gui.option.container.RotationData;
+import net.w3e.util.common.gui.option.container.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER>> {
 
 	public final Function<OBJECT, VALUE_HOLDER> converter;
 
 	private final List<OptionProvider<?, OBJECT, ?, ?>> list = new ArrayList<>();
 
-	public OptionProviderBuilder(Function<OBJECT, VALUE_HOLDER> converter) {
-		this.converter = converter;
+	@SuppressWarnings("unchecked")
+	public BUILDER child() {
+		return (BUILDER) new OptionProviderBuilder<>(this.converter);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -106,7 +107,15 @@ public class OptionProviderBuilder<OBJECT, VALUE_HOLDER, BUILDER extends OptionP
 	}
 
 	public <E> BUILDER addCollection(Component title, ListData<E, OBJECT> listData, Function<VALUE_HOLDER, List<E>> getter, BiConsumer<VALUE_HOLDER, List<E>> setter) {
-		return this.add(new OptionProvider<>(OptionProviderType.geCollection(), title, listData, this.converter, getter, setter));
+		return this.add(new OptionProvider<>(OptionProviderType.getCollection(), title, listData, this.converter, getter, setter));
+	}
+
+	public <E> BUILDER addEnumPage(Component title, List<E> constants, Function<VALUE_HOLDER, E> getter, BiConsumer<VALUE_HOLDER, E> setter, Function<BUILDER, Map<E, PageData.PageFactoryData<OBJECT, VALUE_HOLDER>>> factoryDataMap) {
+		return this.add(new OptionProvider<>(OptionProviderType.getEnumPage(), title, new PageData<>(RangeOption.ofCycle(constants), factoryDataMap != null ? factoryDataMap.apply(this.child()) : null), this.converter, getter, setter));
+	}
+
+	public <E extends Enum<E>> BUILDER addEnumPage(Component title, Class<E> cl, Function<VALUE_HOLDER, E> getter, BiConsumer<VALUE_HOLDER, E> setter, Function<BUILDER, Map<E, PageData.PageFactoryData<OBJECT, VALUE_HOLDER>>> factoryDataMap) {
+		return this.addEnumPage(title, List.of(cl.getEnumConstants()), getter, setter, factoryDataMap);
 	}
 
 	// TODO typed

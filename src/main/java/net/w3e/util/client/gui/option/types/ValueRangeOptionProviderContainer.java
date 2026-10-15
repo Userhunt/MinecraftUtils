@@ -14,13 +14,13 @@ import java.util.Optional;
 
 public class ValueRangeOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, E> {
 
-	public ValueRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, E> provider, ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
-		super(provider, container);
+	public ValueRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, E> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
+		super(provider, containerPair);
 
 		var args = this.provider.getArgs();
-		List<E> values = args.value();
+		List<E> values = args.range();
 		NumberRangeInput.RangeInfo rangeInfo = new NumberRangeInput.RangeInfo(0, values.size() - 1, Optional.of((float) values.indexOf(this.value)), Optional.of(1f));
-		var slider = new WSlider(0, 0, 120, 20,
+		var slider = new WSlider(0, 0, getTabbedWidth(), 20,
 				e -> args.textGetter().apply(this.provider.getTitle().copy(), values.get(FastMath.round(e))), rangeInfo, e -> this.value = values.get(FastMath.round(e))
 		);
 		this.addChild(slider);

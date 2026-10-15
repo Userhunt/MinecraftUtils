@@ -9,16 +9,16 @@ import net.w3e.util.common.gui.option.container.ContainerPair;
 
 import java.util.List;
 
-public class EnumOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, Object> {
+public class EnumOptionProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<RangeOption<E, List<E>>, OBJECT, E> {
 
 	@SuppressWarnings("unchecked")
-	public EnumOptionProviderContainer(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> container, @SuppressWarnings("unused") Screen screen) {
-		super(provider, container);
+	public EnumOptionProviderContainer(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
+		super((OptionProvider<?, OBJECT, ?, E>) provider, containerPair);
 
 		var args = this.provider.getArgs();
-		this.addChild(CycleButton.builder(e -> args.textGetter().apply(null, (E) e), this.value)
-				.withValues(args.value().toArray())
-				.create(provider.getTitle(), (_, v) -> this.value = v)
+		this.addChild(CycleButton.builder(e -> args.textGetter().apply(null, e), this.value)
+				.withValues(args.range())
+				.create(0, 0, getTabbedWidth(), 20, provider.getTitle(), (_, v) -> this.value = v)
 		);
 	}
 

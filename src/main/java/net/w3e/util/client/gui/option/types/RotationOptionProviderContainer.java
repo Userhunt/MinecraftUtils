@@ -22,9 +22,8 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 	private final EditBox yawBox;
 	private final EditBox pitchBox;
 
-	@SuppressWarnings("unchecked")
-	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> container, Screen screen) {
-		super(provider, container);
+	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
+		super(provider, containerPair);
 
 		var font = screen.getFont();
 
@@ -33,7 +32,9 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 		LinearLayout valueLayout = LinearLayout.horizontal().spacing(5);
 		EditBox editBox;
 
-		editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+		int width = getTabbedWidth(3, NUMBER_WIDTH);
+
+		editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 		editBox.setValue(String.valueOf(round(this.value.yaw())));
 		editBox.setResponder(v -> {
 			try {
@@ -46,7 +47,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 		valueLayout.addChild(editBox);
 
 		if (this.value.hasPitch()) {
-			editBox = new EditBox(font, 0, 0, 60, 20, Component.empty());
+			editBox = new EditBox(font, 0, 0, width, 20, Component.empty());
 			editBox.setValue(String.valueOf(round(this.value.pitch())));
 			editBox.setResponder(v -> {
 				try {
@@ -62,13 +63,13 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 		}
 
 		valueLayout.addChild(Button.builder(Component.literal("Настроить"), _ -> {
-			Vec3OptionProviderContainer<OBJECT> posContainer = (Vec3OptionProviderContainer<OBJECT>) this.container.options().getFirst();
+			Vec3OptionProviderContainer<OBJECT> posContainer = (Vec3OptionProviderContainer<OBJECT>) this.containerPair.options().getFirst();
 			var posOption = posContainer.getValue();
 			Minecraft minecraft = Minecraft.getInstance();
 			assert minecraft.player != null;
 			minecraft.player.connection.sendCommand("tp @s " + posOption.x() + " " + posOption.y() + " " + posOption.z() + " " + this.value.yaw() + " " + this.value.pitch());
 			minecraft.setScreen(new EditRotationScreen());
-		}).width(100).build());
+		}).width(getTabbedWidth(width * 2 + 10, 1, 100)).build());
 
 		this.addChild(new WLayoutProviderContainer(valueLayout));
 	}
@@ -114,7 +115,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 
 		@Override
 		public OBJECT getObject() {
-			return RotationOptionProviderContainer.this.container.object();
+			return RotationOptionProviderContainer.this.containerPair.object();
 		}
 
 	}

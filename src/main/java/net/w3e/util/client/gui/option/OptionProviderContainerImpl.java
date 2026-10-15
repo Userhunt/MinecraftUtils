@@ -7,7 +7,6 @@ import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.skds.lib2.mat.FastMath;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.common.gui.option.OptionProvider;
 import net.w3e.util.common.gui.option.OptionProviderBuilder;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer<OBJECT, VALUE> {
+public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer<OBJECT> {
 
 	public static <OBJECT> ContainerPair<OBJECT> create(Component title, Screen screen, OBJECT object, OptionProviderBuilder<OBJECT, ?, ?> builder) {
 		return create(title, screen, object, builder.build());
@@ -30,7 +29,7 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 		LinearLayout contents = LinearLayout.vertical().spacing(5);
 		contents.addChild(new StringWidget(title, screen.getFont()), LayoutSettings::alignHorizontallyCenter);
 
-		ContainerPair<OBJECT> container = new ContainerPair<>(new ArrayList<>(), contents, object);
+		ContainerPair<OBJECT> container = new ContainerPair<>(new ArrayList<>(), contents, object, 0);
 
 		for (var optionProvider : builder) {
 			LayoutElement option = null;
@@ -51,37 +50,55 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 		return container;
 	}
 
-	protected final ContainerPair<OBJECT> container;
+	protected final ContainerPair<OBJECT> containerPair;
 	protected final OptionProvider<ARGS, OBJECT, ?, VALUE> provider;
 	protected final VALUE valueCache;
 	@Getter
 	protected VALUE value;
 
 	@SuppressWarnings("unchecked")
-	public OptionProviderContainerImpl(OptionProvider<?, OBJECT, ?, VALUE> provider, ContainerPair<OBJECT> container) {
+	public OptionProviderContainerImpl(OptionProvider<?, OBJECT, ?, VALUE> provider, ContainerPair<OBJECT> containerPair) {
 		super(LinearLayout.vertical().spacing(5));
-		this.container = container;
+		this.containerPair = containerPair;
 		this.provider = (OptionProvider<ARGS, OBJECT, ?, VALUE>) provider;
-		this.valueCache = provider.getValue(container.object());
+		this.valueCache = provider.getValue(containerPair.object());
 		this.value = this.valueCache;
+		this.setLeftPadding(this.containerPair.getTab());
+	}
+
+	protected final int getTabbedWidth() {
+		return getTabbedWidth(BUTTON_WIDTH);
+	}
+
+	protected final int getTabbedWidth(int width) {
+		return getTabbedWidth(1, width);
+	}
+
+	protected final int getTabbedWidth(int count, int width) {
+		return getTabbedWidth(0, count, width);
+	}
+
+	protected final int getTabbedWidth(int offset, int count, int width) {
+		int area = WIDTH - this.getLeftPadding() - offset - 10 * (count - 1);
+		return Math.min(area / count, width);
 	}
 
 	protected final float round(float value) {
 		float scale = 1000f;
-		return FastMath.round(value * scale) / scale;
+		return Math.round(value * scale) / scale;
 	}
 
 	protected final double round(double value) {
 		double scale = 1000f;
-		return FastMath.round(value * scale) / scale;
+		return Math.round(value * scale) / scale;
 	}
 
 	@Override
-	public OptionProviderUpdateData<OBJECT, VALUE> createUpdateData() {
+	public List<OptionProviderUpdateData<OBJECT, ?>> createUpdateData() {
 		if (!this.provider.equals(this.valueCache, this.value)) {
-			return new OptionProviderUpdateData<>(this.provider, this.value);
+			return List.of(new OptionProviderUpdateData.Single<>(this.provider, this.value));
 		}
-		return null;
+		return List.of();
 	}
 
 }
