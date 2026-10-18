@@ -1,6 +1,7 @@
 package net.w3e.util.client.gui.option.types;
 
 import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.screens.Screen;
 import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
@@ -56,7 +57,7 @@ public class EnumPageProviderContainer<E, OBJECT> extends OptionProviderContaine
 				this.contents = new ArrayList<>();
 				for (var provider : providers) {
 					var content = provider.createOption(containerPair, this.screen);
-					this.addChild(content);
+					this.addChild((LayoutElement) content);
 					this.contents.add(content);
 				}
 			}

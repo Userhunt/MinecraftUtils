@@ -1,11 +1,10 @@
 package net.w3e.util.common.gui.option.container;
 
-import net.minecraft.client.gui.layouts.LayoutElement;
 import net.w3e.util.common.gui.option.OptionProviderUpdateData;
 
 import java.util.List;
 
-public interface OptionProviderContainer<OBJECT> extends LayoutElement {
+public interface OptionProviderContainer<OBJECT> {
 	int WIDTH = 300;
 	int BUTTON_WIDTH = 150;
 	int NUMBER_WIDTH = 70;

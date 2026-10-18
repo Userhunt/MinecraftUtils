@@ -80,7 +80,7 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 
 	protected final int getTabbedWidth(int offset, int count, int width) {
 		int area = WIDTH - this.getLeftPadding() - offset - 10 * (count - 1);
-		return Math.min(area / count, width);
+		return Math.clamp(area / count, width / 2, width);
 	}
 
 	protected final float round(float value) {
