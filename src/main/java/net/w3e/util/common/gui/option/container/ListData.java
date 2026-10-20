@@ -1,7 +1,14 @@
 package net.w3e.util.common.gui.option.container;
 
+import net.w3e.util.common.gui.option.OptionProvider;
+
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public record ListData<E, OBJECT>(Function<OBJECT, E> factory, Function<E, E> copy,
-								  ProviderFactory<E, OBJECT> provider) {
+public record ListData<E, OBJECT>(Function<OBJECT, E> factory, ProviderFactory<E, OBJECT> provider) {
+
+	public interface ProviderFactory<E, OBJECT> {
+		OptionProvider<?, OBJECT, OBJECT, E> crateProvider(Function<OBJECT, OBJECT> converter, Function<OBJECT, E> getter, BiConsumer<OBJECT, E> setter);
+	}
+
 }

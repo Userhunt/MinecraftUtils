@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
-import net.w3e.util.common.gui.option.OptionProviderUpdateData;
 import net.w3e.util.common.gui.option.container.ContainerPair;
 import net.w3e.util.common.gui.option.container.ListData;
 import net.w3e.util.mixins.client.ScreenAccessor;
@@ -28,21 +27,20 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	public CollectionOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
 		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, containerPair);
 
+		var args = this.provider.getArgs();
 		if (this.value == null) {
 			this.value = new ArrayList<>();
-		} else {
-			this.value = new ArrayList<>(this.value);
+			this.provider.setValue(this.containerPair.object(), this.value);
 		}
 
 		this.screen = screen;
 
-		var args = this.provider.getArgs();
 		for (E v : this.value) {
-			this.containers.add(new ElementContainer(args.copy().apply(v), args));
+			this.containers.add(new ElementContainer(v, args));
 		}
 
 		this.title = new StringWidget(this.provider.getTitle(), screen.getFont());
-		this.addButton = Button.builder(Component.literal("Добавить"), _ -> {
+		this.addButton = Button.builder(Component.literal("Добавить Элемент"), _ -> {
 			add();
 			init(true);
 		}).build();
@@ -51,12 +49,13 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	}
 
 	@Override
-	public List<OptionProviderUpdateData<OBJECT, ?>> createUpdateData() {
+	public void createUpdateData() {
 		this.value.clear();
 		for (ElementContainer container : this.containers) {
-			this.value.add(container.container.getValue());
+			container.createUpdateData0();
+			this.value.add(container.value);
 		}
-		return super.createUpdateData();
+		super.createUpdateData();
 	}
 
 	private void add() {
@@ -81,13 +80,18 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	private class ElementContainer extends WLayoutProviderContainer {
 
 		private final OptionProviderContainerImpl<?, OBJECT, E> container;
+		private E value;
 
 		public ElementContainer(E value, ListData<E, OBJECT> args) {
 			super(LinearLayout.vertical().spacing(5));
-
+			this.value = value;
 			var containerPair = CollectionOptionProviderContainer.this.containerPair.newTab();
 
-			this.container = args.provider().crateProvider(Function.identity(), (_) -> value, null).createOption(CollectionOptionProviderContainer.this.containerPair.newTab(), CollectionOptionProviderContainer.this.screen);
+			this.container = args.provider().crateProvider(Function.identity(),
+					(_) -> this.value,
+					(_, e) -> this.value = e
+			).createOption(CollectionOptionProviderContainer.this.containerPair.newTab(), CollectionOptionProviderContainer.this.screen);
+
 			this.addChild(this.container);
 
 			int tab = containerPair.getTab();
@@ -98,6 +102,10 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 			}).width(getTabbedWidth(tab, 1, BUTTON_WIDTH)).build(), e -> e.paddingLeft(tab));
 		}
 
+		public void createUpdateData0() {
+			this.container.setValue(this.value);
+			this.container.createUpdateData();
+		}
 	}
 
 }

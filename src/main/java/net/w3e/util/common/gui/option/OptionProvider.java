@@ -70,7 +70,7 @@ public class OptionProvider<ARGS, OBJECT, VALUE_HOLDER, VALUE> implements Compar
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends OptionProviderContainer<OBJECT>> T createOption(ContainerPair<OBJECT> containerPair, Screen screen) {
+	public <T extends OptionProviderContainer> T createOption(ContainerPair<OBJECT> containerPair, Screen screen) {
 		return (T) this.getType().createOption(this, containerPair, screen);
 	}
 

@@ -1,6 +1,7 @@
 package net.w3e.util.client.gui.option;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LayoutSettings;
@@ -10,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.common.gui.option.OptionProvider;
 import net.w3e.util.common.gui.option.OptionProviderBuilder;
-import net.w3e.util.common.gui.option.OptionProviderUpdateData;
 import net.w3e.util.common.gui.option.container.ContainerPair;
 import net.w3e.util.common.gui.option.container.OptionProviderContainer;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer<OBJECT> {
+public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutProviderContainer implements OptionProviderContainer {
 
 	public static <OBJECT> ContainerPair<OBJECT> create(Component title, Screen screen, OBJECT object, OptionProviderBuilder<OBJECT, ?, ?> builder) {
 		return create(title, screen, object, builder.build());
@@ -52,8 +52,8 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 
 	protected final ContainerPair<OBJECT> containerPair;
 	protected final OptionProvider<ARGS, OBJECT, ?, VALUE> provider;
-	protected final VALUE valueCache;
 	@Getter
+	@Setter
 	protected VALUE value;
 
 	@SuppressWarnings("unchecked")
@@ -61,8 +61,7 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 		super(LinearLayout.vertical().spacing(5));
 		this.containerPair = containerPair;
 		this.provider = (OptionProvider<ARGS, OBJECT, ?, VALUE>) provider;
-		this.valueCache = provider.getValue(containerPair.object());
-		this.value = this.valueCache;
+		this.value = this.provider.getValue(containerPair.object());
 		this.setLeftPadding(this.containerPair.getTab());
 	}
 
@@ -93,12 +92,7 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 		return Math.round(value * scale) / scale;
 	}
 
-	@Override
-	public List<OptionProviderUpdateData<OBJECT, ?>> createUpdateData() {
-		if (!this.provider.equals(this.valueCache, this.value)) {
-			return List.of(new OptionProviderUpdateData.Single<>(this.provider, this.value));
-		}
-		return List.of();
+	public void createUpdateData() {
+		this.provider.setValue(this.containerPair.object(), this.value);
 	}
-
 }

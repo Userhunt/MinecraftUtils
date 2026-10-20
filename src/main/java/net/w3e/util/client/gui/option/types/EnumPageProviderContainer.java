@@ -5,7 +5,6 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.screens.Screen;
 import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
 import net.w3e.util.common.gui.option.OptionProvider;
-import net.w3e.util.common.gui.option.OptionProviderUpdateData;
 import net.w3e.util.common.gui.option.container.ContainerPair;
 import net.w3e.util.common.gui.option.container.OptionProviderContainer;
 import net.w3e.util.common.gui.option.container.PageData;
@@ -15,24 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class EnumPageProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<PageData<E, List<E>, OBJECT, ?>, OBJECT, E> {
+public class EnumPageProviderContainer<E, OBJECT> extends OptionProviderContainerImpl<PageData<E, List<E>, OBJECT, ?>, OBJECT, PageData.PageKey<E, ?>> {
 
 	private final Screen screen;
 	private final CycleButton<E> button;
-	private List<OptionProviderContainer<OBJECT>> contents;
+	private List<OptionProviderContainer> contents;
 
 	@SuppressWarnings("unchecked")
-	public EnumPageProviderContainer(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
-		super((OptionProvider<?, OBJECT, ?, E>) provider, containerPair);
+	public EnumPageProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
+		super((OptionProvider<?, OBJECT, ?, PageData.PageKey<E, ?>>) provider, containerPair);
 
 		this.screen = screen;
 
 		var args = this.provider.getArgs();
 		var range = args.rangeOption();
-		this.button = CycleButton.builder(e -> range.textGetter().apply(null, e), this.value)
+		this.button = CycleButton.builder(e -> range.textGetter().apply(null, e), this.value.key())
 				.withValues(range.range())
 				.create(0, 0, BUTTON_WIDTH, 20, provider.getTitle(), (_, v) -> {
-					this.value = v;
+					this.value = new PageData.PageKey<>(v, null);
 					init(true);
 				});
 		init(false);
@@ -47,18 +46,20 @@ public class EnumPageProviderContainer<E, OBJECT> extends OptionProviderContaine
 		var factoryMap = this.provider.getArgs().pageFactoryMap();
 		if (factoryMap != null) {
 			var factoryData = factoryMap.get(this.value);
-			Consumer<Object> onSet = (Consumer<Object>) factoryData.onSet();
-			if (onSet != null) {
-				onSet.accept(this.provider.getHolder(this.containerPair.object()));
-			}
-			var providers = factoryData.provider();
-			if (providers != null) {
-				var containerPair = this.containerPair.newTab();
-				this.contents = new ArrayList<>();
-				for (var provider : providers) {
-					var content = provider.createOption(containerPair, this.screen);
-					this.addChild((LayoutElement) content);
-					this.contents.add(content);
+			if (factoryData != null) {
+				Consumer<Object> onSet = (Consumer<Object>) factoryData.onSet();
+				if (onSet != null) {
+					onSet.accept(this.provider.getHolder(this.containerPair.object()));
+				}
+				var providers = factoryData.provider();
+				if (providers != null) {
+					var containerPair = this.containerPair.newTab();
+					this.contents = new ArrayList<>();
+					for (var provider : providers) {
+						var content = provider.createOption(containerPair, this.screen);
+						this.addChild((LayoutElement) content);
+						this.contents.add(content);
+					}
 				}
 			}
 		}
@@ -68,14 +69,12 @@ public class EnumPageProviderContainer<E, OBJECT> extends OptionProviderContaine
 	}
 
 	@Override
-	public List<OptionProviderUpdateData<OBJECT, ?>> createUpdateData() {
-		List<OptionProviderUpdateData<OBJECT, ?>> list = new ArrayList<>(super.createUpdateData());
+	public void createUpdateData() {
 		if (this.contents != null) {
 			for (var content : this.contents) {
-				list.addAll(content.createUpdateData());
+				content.createUpdateData();
 			}
 		}
-		return list;
 	}
 
 }

@@ -4,7 +4,7 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 
 import java.util.List;
 
-public record ContainerPair<OBJECT>(List<OptionProviderContainer<OBJECT>> options, LinearLayout contents,
+public record ContainerPair<OBJECT>(List<OptionProviderContainer> options, LinearLayout contents,
 									OBJECT object, int tab) {
 	public ContainerPair<OBJECT> newTab() {
 		return new ContainerPair<>(this.options, this.contents, this.object, this.tab + 1);

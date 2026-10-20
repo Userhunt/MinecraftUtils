@@ -13,6 +13,8 @@ import net.w3e.util.client.gui.layout.WLayoutUtils;
 
 public abstract class WAbstractScrollableScreen<E extends LayoutElement> extends Screen {
 
+	protected static final int MAX_WIDTH = 300;
+
 	@Getter(AccessLevel.PROTECTED)
 	private FrameLayout layout;
 	private LinearLayout body;
