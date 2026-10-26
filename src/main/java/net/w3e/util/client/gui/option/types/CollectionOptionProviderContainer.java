@@ -27,7 +27,7 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	public CollectionOptionProviderContainer(OptionProvider<?, OBJECT, ?, ?> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
 		super((OptionProvider<?, OBJECT, ?, List<E>>) provider, containerPair);
 
-		var args = this.provider.getArgs();
+		ListData<E, OBJECT> args = this.provider.getArgs();
 		if (this.value == null) {
 			this.value = new ArrayList<>();
 			this.provider.setValue(this.containerPair.object(), this.value);
@@ -59,7 +59,7 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 	}
 
 	private void add() {
-		var args = this.provider.getArgs();
+		ListData<E, OBJECT> args = this.provider.getArgs();
 		E newValue = args.factory().apply(this.containerPair.object());
 		this.containers.add(new ElementContainer(newValue, args));
 		init(true);
@@ -85,7 +85,7 @@ public class CollectionOptionProviderContainer<E, OBJECT> extends OptionProvider
 		public ElementContainer(E value, ListData<E, OBJECT> args) {
 			super(LinearLayout.vertical().spacing(5));
 			this.value = value;
-			var containerPair = CollectionOptionProviderContainer.this.containerPair.newTab();
+			ContainerPair<OBJECT> containerPair = CollectionOptionProviderContainer.this.containerPair.newTab();
 
 			this.container = args.provider().crateProvider(Function.identity(),
 					(_) -> this.value,

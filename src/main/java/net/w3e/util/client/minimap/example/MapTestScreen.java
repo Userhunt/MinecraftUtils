@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.client.minimap.MapRadiusPredicate;
 import net.w3e.util.client.minimap.MapTextureSegment;
@@ -58,13 +59,12 @@ public class MapTestScreen extends Screen {
 
 			var chunkPos = player.chunkPosition();
 
-			var world = player.level();
+			Level world = player.level();
 			var dimension = world.dimension();
 
 			int offset = OFFSET * textureSize / 16;
 			offset = Math.max(OFFSET, offset);
 			contents.spacing(offset);
-			System.out.println(offset);
 
 			var playerX = player.getX();
 			var playerZ = player.getZ();

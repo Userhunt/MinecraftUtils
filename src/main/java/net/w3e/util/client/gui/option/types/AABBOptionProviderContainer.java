@@ -1,5 +1,6 @@
 package net.w3e.util.client.gui.option.types;
 
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -15,15 +16,15 @@ public class AABBOptionProviderContainer<OBJECT> extends OptionProviderContainer
 	public AABBOptionProviderContainer(OptionProvider<?, OBJECT, ?, AABB> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
 		super(provider, containerPair);
 
-		var font = screen.getFont();
+		Font font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
 		GridLayout valueLayout = new GridLayout().spacing(10);
 		EditBox editBox;
 
-		final var widgetMin = new StringWidget(Component.literal("Min"), font);
-		final var widgetMax = new StringWidget(Component.literal("Max"), font);
+		final StringWidget widgetMin = new StringWidget(Component.literal("Min"), font);
+		final StringWidget widgetMax = new StringWidget(Component.literal("Max"), font);
 		valueLayout.addChild(widgetMin, 0, 0);
 		final int width = getTabbedWidth(Math.max(widgetMin.getWidth(), widgetMax.getWidth()), 3, NUMBER_WIDTH);
 

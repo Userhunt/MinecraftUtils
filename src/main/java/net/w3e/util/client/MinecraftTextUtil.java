@@ -22,7 +22,7 @@ public class MinecraftTextUtil {
 			final Holders.ObjectHolder<Style> currentStyle = new Holders.ObjectHolder<>();
 
 			line.accept((_, style, codePoint) -> {
-				var value = currentStyle.getValue();
+				Style value = currentStyle.getValue();
 				if (value == null) {
 					currentStyle.setValue(style);
 				} else {

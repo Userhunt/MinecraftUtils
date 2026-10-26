@@ -116,7 +116,7 @@ public abstract class WAbstractLayout extends AbstractWidget implements WLayout 
 
 	@Override
 	protected final void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-		var scissor = this.scissor;
+		boolean scissor = this.scissor;
 		if (scissor) {
 			int scissorX = this.getX();
 			int scissorY = this.getY();

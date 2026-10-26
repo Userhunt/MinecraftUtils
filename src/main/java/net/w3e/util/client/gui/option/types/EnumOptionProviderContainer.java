@@ -15,7 +15,8 @@ public class EnumOptionProviderContainer<E, OBJECT> extends OptionProviderContai
 	public EnumOptionProviderContainer(OptionProvider<?, OBJECT, ?, Object> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
 		super((OptionProvider<?, OBJECT, ?, E>) provider, containerPair);
 
-		var args = this.provider.getArgs();
+		RangeOption<E, List<E>> args = this.provider.getArgs();
+
 		this.addChild(CycleButton.builder(e -> args.textGetter().apply(null, e), this.value)
 				.withValues(args.range())
 				.create(0, 0, getTabbedWidth(), 20, provider.getTitle(), (_, v) -> this.value = v)

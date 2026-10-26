@@ -16,10 +16,10 @@ public class FloatRangeOptionProviderContainer<OBJECT> extends OptionProviderCon
 	public FloatRangeOptionProviderContainer(OptionProvider<?, OBJECT, ?, Float> provider, ContainerPair<OBJECT> containerPair, @SuppressWarnings("unused") Screen screen) {
 		super(provider, containerPair);
 
-		var args = this.provider.getArgs();
-		var range = args.range();
+		RangeOption<Float, FloatRangeOption> args = this.provider.getArgs();
+		FloatRangeOption range = args.range();
 		NumberRangeInput.RangeInfo rangeInfo = new NumberRangeInput.RangeInfo(range.min(), range.max(), Optional.of(this.value), Optional.of(range.step()));
-		var slider = new WSlider(0, 0, getTabbedWidth(), 20,
+		WSlider slider = new WSlider(0, 0, getTabbedWidth(), 20,
 				e -> args.textGetter().apply(this.provider.getTitle().copy(), round(e)), rangeInfo, e -> this.value = round(e)
 		);
 		this.addChild(slider);

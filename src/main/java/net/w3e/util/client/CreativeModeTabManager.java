@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.fabricmc.fabric.impl.creativetab.FabricCreativeModeTabImpl;
 import net.fabricmc.fabric.mixin.creativetab.CreativeModeTabAccessor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.skds.lib2.reflection.FindOptions;
 import net.skds.lib2.reflection.ReflectUtils;
 import net.w3e.util.mixins.CreativeTabHack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -42,7 +44,7 @@ public class CreativeModeTabManager {
 			int count = (int) BuiltInRegistries.CREATIVE_MODE_TAB.listElements().count() - ReflectUtils.getAllFields(CreativeModeTabs.class, new FindOptions(ResourceKey.class)).size();
 			needInitialize = false;
 			for (CreativeModeTabHolder holder : TABS.values()) {
-				var creativeModeTab = holder.tab;
+				CreativeModeTab creativeModeTab = holder.tab;
 
 				((FabricCreativeModeTabImpl) creativeModeTab).fabric_setPage((count / TABS_PER_PAGE) + 1);
 				int pageIndex = count % TABS_PER_PAGE;
@@ -75,9 +77,9 @@ public class CreativeModeTabManager {
 		private void initialize() {
 			if (!this.init) {
 				this.init = true;
-				var minecraft = Minecraft.getInstance();
+				Minecraft minecraft = Minecraft.getInstance();
 				assert minecraft.player != null;
-				var player = minecraft.player;
+				@Nullable LocalPlayer player = minecraft.player;
 				try {
 					((CreativeTabHack) this.tab).w3e$buildContents(new CreativeModeTab.ItemDisplayParameters(
 							player.connection.enabledFeatures(),

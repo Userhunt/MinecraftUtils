@@ -31,7 +31,7 @@ public class OptionProviderContainerImpl<ARGS, OBJECT, VALUE> extends WLayoutPro
 
 		ContainerPair<OBJECT> container = new ContainerPair<>(new ArrayList<>(), contents, object, 0);
 
-		for (var optionProvider : builder) {
+		for (OptionProvider<?, OBJECT, ?, ?> optionProvider : builder) {
 			LayoutElement option = null;
 			try {
 				option = optionProvider.createOption(container, screen);

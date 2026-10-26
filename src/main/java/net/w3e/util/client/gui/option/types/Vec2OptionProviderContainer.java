@@ -1,5 +1,6 @@
 package net.w3e.util.client.gui.option.types;
 
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -16,7 +17,7 @@ public class Vec2OptionProviderContainer<OBJECT> extends OptionProviderContainer
 	public Vec2OptionProviderContainer(OptionProvider<?, OBJECT, ?, Vec2> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
 		super(provider, containerPair);
 
-		var font = screen.getFont();
+		Font font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 

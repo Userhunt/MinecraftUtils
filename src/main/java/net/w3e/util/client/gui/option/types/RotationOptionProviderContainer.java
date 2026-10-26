@@ -1,13 +1,16 @@
 package net.w3e.util.client.gui.option.types;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.skds.lib2.mat.vec3.Vec3;
 import net.w3e.util.client.MouseHelper;
 import net.w3e.util.client.gui.container.WLayoutProviderContainer;
 import net.w3e.util.client.gui.option.OptionProviderContainerImpl;
@@ -25,7 +28,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 	public RotationOptionProviderContainer(OptionProvider<?, OBJECT, ?, RotationData> provider, ContainerPair<OBJECT> containerPair, Screen screen) {
 		super(provider, containerPair);
 
-		var font = screen.getFont();
+		Font font = screen.getFont();
 
 		this.addChild(new StringWidget(provider.getTitle(), font));
 
@@ -64,7 +67,7 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 
 		valueLayout.addChild(Button.builder(Component.literal("Настроить"), _ -> {
 			Vec3OptionProviderContainer<OBJECT> posContainer = (Vec3OptionProviderContainer<OBJECT>) this.containerPair.options().getFirst();
-			var posOption = posContainer.getValue();
+			Vec3 posOption = posContainer.getValue();
 			Minecraft minecraft = Minecraft.getInstance();
 			assert minecraft.player != null;
 			minecraft.player.connection.sendCommand("tp @s " + posOption.x() + " " + posOption.y() + " " + posOption.z() + " " + this.value.yaw() + " " + this.value.pitch());
@@ -102,9 +105,9 @@ public class RotationOptionProviderContainer<OBJECT> extends OptionProviderConta
 
 		@Override
 		public void onClose() {
-			var player = this.minecraft.player;
+			@Nullable LocalPlayer player = this.minecraft.player;
 			assert player != null;
-			var gui = RotationOptionProviderContainer.this;
+			RotationOptionProviderContainer<OBJECT> gui = RotationOptionProviderContainer.this;
 			gui.value = new RotationData(player.getYRot(), player.getXRot(), gui.value.hasPitch());
 			this.minecraft.setScreen(this.screen);
 			gui.yawBox.setValue(String.valueOf(round(player.getYRot())));
